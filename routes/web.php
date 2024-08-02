@@ -38,9 +38,17 @@ Route::middleware('auth')->group(function () {
         Route::put('/edit/{id}', [RoleController::class, 'edit_post'])->name('role.edit_post');
         Route::delete('/delete/{id}', [RoleController::class, 'delete'])->name('role.delete');
     });
-
     // user
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::get('/create', [UserController::class, 'create'])->name('user.create');
+        Route::post('/create', [UserController::class, 'create_post'])->name('user.create_post');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+        Route::put('/edit/{id}', [UserController::class, 'edit_post'])->name('user.edit_post');
+        Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+    });
+
+    
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
