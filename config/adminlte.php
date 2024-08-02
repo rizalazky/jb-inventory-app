@@ -403,15 +403,15 @@ return [
             'submenu' => [
                 [
                     'text' => 'ROLE',
-                    'url' => '#',
+                    'url' => '/role',
                 ],
                 [
                     'text' => 'USER',
-                    'url' => '#',
+                    'url' => '/user',
                 ],
                 [
                     'text' => 'AKSES',
-                    'url' => '#',
+                    'url' => '/akses',
                 ],
             ]
         ],
