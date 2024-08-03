@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +31,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // role
-    Route::prefix('role')->group(function () {
+    Route::middleware('role_or_permission:lihat role')->prefix('role')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('role.index');
         Route::get('/create', [RoleController::class, 'create'])->name('role.create');
         Route::post('/create', [RoleController::class, 'create_post'])->name('role.create_post');
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [RoleController::class, 'delete'])->name('role.delete');
     });
     // user
-    Route::prefix('user')->group(function () {
+    Route::middleware('role_or_permission:lihat user')->prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
         Route::get('/create', [UserController::class, 'create'])->name('user.create');
         Route::post('/create', [UserController::class, 'create_post'])->name('user.create_post');
@@ -48,8 +49,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
     });
 
-    
-
+    Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class RoleDataTable extends DataTable
+class PermissionDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,7 +22,7 @@ class RoleDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'role.datatables.action')
+            // ->addColumn('action', 'role.datatables.action')
             ->order(function ($query) {
                 if (request()->has('id')) {
                     $query->orderBy('id', 'asc');
@@ -34,7 +34,7 @@ class RoleDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(Role $model): QueryBuilder
+    public function query(Permission $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -45,19 +45,19 @@ class RoleDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('role-table')
+                    ->setTableId('permission-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('add'),
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
+                        // Button::make('add'),
+                        // Button::make('excel'),
+                        // Button::make('csv'),
+                        // Button::make('pdf'),
                         Button::make('print'),
-                        Button::make('reset'),
+                        // Button::make('reset'),
                         Button::make('reload')
                     ]);
     }
@@ -70,12 +70,12 @@ class RoleDataTable extends DataTable
         return [
             Column::make('id'),
             Column::make('name'),
-            Column::make('guard_name'),
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+            // Column::make('guard_name'),
+            // Column::computed('action')
+            //       ->exportable(false)
+            //       ->printable(false)
+            //       ->width(60)
+            //       ->addClass('text-center'),
             // Column::make('created_at'),
             // Column::make('updated_at'),
             // Column::make('action'),
@@ -87,6 +87,6 @@ class RoleDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Role_' . date('YmdHis');
+        return 'Permission_' . date('YmdHis');
     }
 }

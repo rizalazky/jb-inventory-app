@@ -298,7 +298,7 @@ return [
         [
             'type' => 'navbar-search',
             'text' => 'search',
-            'topnav_right' => true,
+            'topnav_right' => true,            
         ],
         [
             'type' => 'fullscreen-widget',
@@ -334,44 +334,49 @@ return [
         //     'icon' => 'fas fa-fw fa-lock',
         // ],
         [
-            'text' => 'MASTER BARANG',
+            'text' => 'MASTER PRODUK',
             'icon' => 'fas fa-fw fa-table',
+            'can' => 'lihat produk',
             'submenu' => [
                 [
-                    'text' => 'JENIS BARANG',
+                    'text' => 'KATEGORI PRODUK',
                     'url' => '#',
+                    'can' => 'lihat kategori produk',
+                ],
+                // [
+                //     'text' => 'MERK BARANG',
+                //     'url' => '#',
+                //     'can' => 'lihat merk produk',
+                //     'submenu' => [
+                //         [
+                //             'text' => 'level_two',
+                //             'url' => '#',
+                //         ],
+                //         [
+                //             'text' => 'level_two',
+                //             'url' => '#',
+                //             'submenu' => [
+                //                 [
+                //                     'text' => 'level_three',
+                //                     'url' => '#',
+                //                 ],
+                //                 [
+                //                     'text' => 'level_three',
+                //                     'url' => '#',
+                //                 ],
+                //             ],
+                //         ],
+                //     ],
+                // ],
+                [
+                    'text' => 'UNIT PRODUK',
+                    'url' => '#',
+                    'can' => 'lihat unit produk',
                 ],
                 [
-                    'text' => 'MERK BARANG',
+                    'text' => 'PRODUK',
                     'url' => '#',
-                    // 'submenu' => [
-                    //     [
-                    //         'text' => 'level_two',
-                    //         'url' => '#',
-                    //     ],
-                    //     [
-                    //         'text' => 'level_two',
-                    //         'url' => '#',
-                    //         'submenu' => [
-                    //             [
-                    //                 'text' => 'level_three',
-                    //                 'url' => '#',
-                    //             ],
-                    //             [
-                    //                 'text' => 'level_three',
-                    //                 'url' => '#',
-                    //             ],
-                    //         ],
-                    //     ],
-                    // ],
-                ],
-                [
-                    'text' => 'SATUAN BARANG',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'BARANG',
-                    'url' => '#',
+                    'can' => 'lihat produk',
                 ],
             ],
         ],
@@ -379,39 +384,47 @@ return [
             'text' => 'CUSTOMER',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
+            'can' => 'lihat customer',
         ],
         [
             'text' => 'SUPPLIER',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
+            'can' => 'lihat supplier',
         ],
         [
             'text' => 'TRANSAKSI',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
+            'can' => 'lihat transaksi masuk',
         ],
         [
             'text' => 'LAPORAN',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
+            'can' => 'lihat laporan',
         ],
         ['header' => 'OTHER'],
         [
             'text' => 'USER',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
+            'can' => 'lihat user',
             'submenu' => [
                 [
                     'text' => 'ROLE',
                     'url' => '/role',
+                    'can' => 'lihat role',
                 ],
                 [
                     'text' => 'USER',
                     'url' => '/user',
+                    'can' => 'lihat user',
                 ],
                 [
                     'text' => 'AKSES',
                     'url' => '/akses',
+                    'can' => 'lihat akses',
                 ],
             ]
         ],
