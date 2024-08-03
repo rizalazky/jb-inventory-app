@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +48,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/edit/{id}', [UserController::class, 'edit_post'])->name('user.edit_post');
         Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+    });
+    // customers
+    Route::middleware('role_or_permission:lihat customer')->prefix('customer')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
+        Route::get('/create', [CustomerController::class, 'create'])->name('customer.create');
+        Route::post('/create', [CustomerController::class, 'create_post'])->name('customer.create_post');
+        Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customer.edit');
+        Route::put('/edit/{id}', [CustomerController::class, 'edit_post'])->name('customer.edit_post');
+        Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customer.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');

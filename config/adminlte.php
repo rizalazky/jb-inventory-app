@@ -340,7 +340,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'KATEGORI PRODUK',
-                    'url' => '#',
+                    'url' => '/kategory-produk',
                     'can' => 'lihat kategori produk',
                 ],
                 // [
@@ -370,12 +370,12 @@ return [
                 // ],
                 [
                     'text' => 'UNIT PRODUK',
-                    'url' => '#',
+                    'url' => '/unit',
                     'can' => 'lihat unit produk',
                 ],
                 [
                     'text' => 'PRODUK',
-                    'url' => '#',
+                    'url' => '/produk',
                     'can' => 'lihat produk',
                 ],
             ],
@@ -383,13 +383,13 @@ return [
         [
             'text' => 'CUSTOMER',
             'icon' => 'fas fa-fw fa-table',
-            'url' => '#',
+            'url' => '/customer',
             'can' => 'lihat customer',
         ],
         [
             'text' => 'SUPPLIER',
             'icon' => 'fas fa-fw fa-table',
-            'url' => '#',
+            'url' => '/supplier',
             'can' => 'lihat supplier',
         ],
         [
