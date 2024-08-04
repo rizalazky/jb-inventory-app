@@ -340,7 +340,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'KATEGORI PRODUK',
-                    'url' => '/kategory-produk',
+                    'url' => '/kategori-produk',
                     'can' => 'lihat kategori produk',
                 ],
                 // [

@@ -5,6 +5,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +77,16 @@ Route::middleware('auth')->group(function () {
         // Route::get('/edit/{id}', [SalesController::class, 'edit'])->name('sales.edit');
         Route::post('/edit_post', [SalesController::class, 'edit_post'])->name('sales.edit_post');
         Route::delete('/delete/{id}', [SalesController::class, 'delete'])->name('sales.delete');
+    });
+
+    // customers
+    Route::middleware('role_or_permission:lihat kategori produk')->prefix('kategori-produk')->group(function () {
+        Route::get('/', [CategoryProductController::class, 'index'])->name('categoryproduct.index');
+        Route::get('/create', [CategoryProductController::class, 'create'])->name('categoryproduct.create');
+        Route::post('/create', [CategoryProductController::class, 'create_post'])->name('categoryproduct.create_post');
+        Route::get('/edit/{id}', [CategoryProductController::class, 'edit'])->name('categoryproduct.edit');
+        Route::put('/edit/{id}', [CategoryProductController::class, 'edit_post'])->name('categoryproduct.edit_post');
+        Route::delete('/delete/{id}', [CategoryProductController::class, 'delete'])->name('categoryproduct.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');
