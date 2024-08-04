@@ -5,6 +5,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,6 +59,23 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customer.edit');
         Route::put('/edit/{id}', [CustomerController::class, 'edit_post'])->name('customer.edit_post');
         Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customer.delete');
+    });
+    // supplier
+    Route::middleware('role_or_permission:lihat supplier')->prefix('supplier')->group(function () {
+        Route::get('/', [SupplierController::class, 'index'])->name('supplier.index');
+        Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
+        Route::post('/create', [SupplierController::class, 'create_post'])->name('supplier.create_post');
+        Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
+        Route::get('/detail/{id}', [SupplierController::class, 'detail'])->name('supplier.detail');
+        Route::put('/edit/{id}', [SupplierController::class, 'edit_post'])->name('supplier.edit_post');
+        Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
+    });
+    // sales
+    Route::middleware('role_or_permission:lihat sales')->prefix('sales')->group(function () {
+        Route::post('/create', [SalesController::class, 'create_post'])->name('sales.create_post');
+        // Route::get('/edit/{id}', [SalesController::class, 'edit'])->name('sales.edit');
+        Route::post('/edit_post', [SalesController::class, 'edit_post'])->name('sales.edit_post');
+        Route::delete('/delete/{id}', [SalesController::class, 'delete'])->name('sales.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');

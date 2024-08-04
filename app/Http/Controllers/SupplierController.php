@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
  
 use App\DataTables\SupplierDataTable;
+use App\DataTables\SalesDataTable;
 use App\Models\Supplier;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
@@ -42,6 +43,19 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::find($id);
         return view('supplier.edit', [
+            'supplier' => $supplier
+        ]);
+    }
+
+    public function detail($id, SalesDataTable $dataTable)
+    {
+
+        $title = 'Delete Sales!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        
+        $supplier = Supplier::find($id);
+        return $dataTable->render('supplier.detail',[
             'supplier' => $supplier
         ]);
     }
