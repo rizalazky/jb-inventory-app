@@ -7,6 +7,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\ProductUnitController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +99,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [ProductUnitController::class, 'edit'])->name('productunit.edit');
         Route::put('/edit/{id}', [ProductUnitController::class, 'edit_post'])->name('productunit.edit_post');
         Route::delete('/delete/{id}', [ProductUnitController::class, 'delete'])->name('productunit.delete');
+    });
+
+    // product
+    Route::middleware('role_or_permission:lihat produk')->prefix('produk')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('product.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/create', [ProductController::class, 'create_post'])->name('product.create_post');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::put('/edit/{id}', [ProductController::class, 'edit_post'])->name('product.edit_post');
+        Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');
