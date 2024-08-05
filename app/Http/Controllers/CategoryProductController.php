@@ -30,6 +30,10 @@ class CategoryProductController extends Controller
 
     public function create_post(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'bail|required|unique:product_categories'
+        ]);
+        
         $categoryproduct = ProductCategory::create([
             'name' =>$request->name,
         ]);
@@ -50,6 +54,10 @@ class CategoryProductController extends Controller
 
     public function edit_post(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'bail|required|unique:product_categories'
+        ]);
+
         $categoryproduct = ProductCategory::find($request->id);
         $categoryproduct->name = $request->name;
         $categoryproduct->save();

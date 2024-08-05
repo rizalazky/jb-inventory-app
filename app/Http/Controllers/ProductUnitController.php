@@ -57,6 +57,10 @@ class ProductUnitController extends Controller
 
     public function edit_post(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'bail|required|unique:product_unit'
+        ]);
+
         $productunit = ProductUnit::find($request->id);
         $productunit->name = $request->name;
         $productunit->save();
