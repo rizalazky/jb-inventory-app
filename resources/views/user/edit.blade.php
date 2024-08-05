@@ -23,9 +23,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="role" class="form-label">Role</label>
-                        <select name="role" class="form-control" value="{{ $user->roles[0]->name }}" id="role">
+                        <select name="role" class="form-control" id="role">
+                        <option>-- Pilih Role --</option>
                         @foreach ($roles as $role)
-                            @if($user->roles[0]->name == $role->name)
+                            @if($user->roles->isNotEmpty() && $user->roles->first()->name == $role->name)
                                 <option value="{{ $role->name }}" selected>{{ $role->name }}</option>
                             @else
                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
