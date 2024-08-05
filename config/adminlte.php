@@ -370,7 +370,7 @@ return [
                 // ],
                 [
                     'text' => 'UNIT PRODUK',
-                    'url' => '/unit',
+                    'url' => '/unit-produk',
                     'can' => 'lihat unit produk',
                 ],
                 [

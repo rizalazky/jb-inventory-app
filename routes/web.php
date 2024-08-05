@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
@@ -79,7 +80,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [SalesController::class, 'delete'])->name('sales.delete');
     });
 
-    // customers
+    // product categories
     Route::middleware('role_or_permission:lihat kategori produk')->prefix('kategori-produk')->group(function () {
         Route::get('/', [CategoryProductController::class, 'index'])->name('categoryproduct.index');
         Route::get('/create', [CategoryProductController::class, 'create'])->name('categoryproduct.create');
@@ -87,6 +88,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [CategoryProductController::class, 'edit'])->name('categoryproduct.edit');
         Route::put('/edit/{id}', [CategoryProductController::class, 'edit_post'])->name('categoryproduct.edit_post');
         Route::delete('/delete/{id}', [CategoryProductController::class, 'delete'])->name('categoryproduct.delete');
+    });
+
+    // product unit
+    Route::middleware('role_or_permission:lihat kategori unit')->prefix('unit-produk')->group(function () {
+        Route::get('/', [ProductUnitController::class, 'index'])->name('productunit.index');
+        Route::get('/create', [ProductUnitController::class, 'create'])->name('productunit.create');
+        Route::post('/create', [ProductUnitController::class, 'create_post'])->name('productunit.create_post');
+        Route::get('/edit/{id}', [ProductUnitController::class, 'edit'])->name('productunit.edit');
+        Route::put('/edit/{id}', [ProductUnitController::class, 'edit_post'])->name('productunit.edit_post');
+        Route::delete('/delete/{id}', [ProductUnitController::class, 'delete'])->name('productunit.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');
