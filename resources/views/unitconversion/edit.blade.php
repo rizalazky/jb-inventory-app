@@ -62,11 +62,14 @@
                 
             </div>
             <div class="col-md-6">
-                @include('productprice.index', [
-                    'product_id'=>$product->id,
-                    'productprices' => $product->productprices,
-                    'productunits' => $product_units,
-                ])
+            <table class="table table-striped">
+                <thead>
+                    
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
             </div>
         </div>
     </div>

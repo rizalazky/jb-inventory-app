@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
  
 use App\DataTables\ProductDataTable;
 use App\Models\Product;
+use App\Models\ProductPrice;
 use App\Models\ProductCategory;
+use App\Models\ProductUnit;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -54,12 +56,16 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
+        $product_units = ProductUnit::all();
         $categories = ProductCategory::all();
+        
         return view('product.edit', [
             'product' => $product,
-            'categories' => $categories
+            'categories' => $categories,
+            'product_units' => $product_units,
         ]);
     }
+
 
     public function edit_post(Request $request)
     {
