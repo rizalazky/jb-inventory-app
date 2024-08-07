@@ -11,6 +11,7 @@
                 <th>NO</th>
                 <th>UNIT</th>
                 <th>PRICE</th>
+                <th>STOK</th>
                 <th class="text-center">DEFAULT</th>
                 <th>ACTION</th>
             </thead>
@@ -20,6 +21,7 @@
                         <td>{{ $price->id }}</td>
                         <td>{{ $price->productunit->name }}</td>
                         <td>{{ number_format($price->price) }}</td>
+                        <td>{{ $price->is_default ? $product_stock : $price->convert_stock($price->id,$product_stock) }}</td>
                         <td class="d-flex justify-center">
                             <form action="/harga-produk/set-default" method="post">
                                 @csrf
@@ -38,6 +40,11 @@
                                 >
                                 Edit
                             </button>
+                            @if(!$price->is_default)
+                                <button type="button" class="btn btn-primary btn-sm btn-add-modal-konversi" data-bs-toggle="modal" data-bs-target="#modal-konversi">
+                                    Atur Konversi Stok
+                                </button>
+                            @endif
                             <a href="/harga-produk/delete/{{ $price->id }}" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>

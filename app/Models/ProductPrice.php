@@ -27,6 +27,20 @@ class ProductPrice extends Model
         return $this->hasMany(UnitConversion::class, 'product_price_id_to');
     }
 
+    public function convert_stock($targetUnitId,$value){
+        $conversion = $this->unitconversions_to()
+                    // ->where('product_price_id_from',$this->id)
+                    // ->where('product_price_id_to', $targetUnitId)
+                    ->first();
+        // return $conversion;
+
+        if ($conversion) {
+            return $value * $conversion->value;
+        }
+
+        return null;
+    }
+
     public function productunit(): BelongsTo
     {
         return $this->belongsTo(ProductUnit::class,'unit_id','id');

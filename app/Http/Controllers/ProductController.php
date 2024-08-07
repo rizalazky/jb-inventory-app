@@ -11,6 +11,7 @@ use App\Models\ProductUnit;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 Use Alert;
  
 class ProductController extends Controller
@@ -70,7 +71,11 @@ class ProductController extends Controller
     public function edit_post(Request $request)
     {
         $validatedData = $request->validate([
-            'code' => 'bail|required|unique:products',
+            'code' => [
+                'bail',
+                'required',
+                Rule::unique('products')->ignore($request->id)
+            ],
             'name' => 'bail|required',
             'category_id' => 'bail|required',
         ]);

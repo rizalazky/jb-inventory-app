@@ -3,15 +3,14 @@
         Konversi Satuan
     </div>
     <div class="card-body">
-        <button type="button" class="btn btn-primary btn-sm btn-add-modal-konversi" data-bs-toggle="modal" data-bs-target="#modal-konversi">
-            Tambah Konversi
-        </button>
+        
         <table class="table table-striped">
             <thead>
                 <th>NO</th>
                 <th>DARI(SATUAN)</th>
                 <th>KE(SATUAN) </th>
                 <th>FAKTOR KONFERSI</th>
+                <th>KETERANGAN</th>
                 <th>ACTION</th>
             </thead>
             <tbody>
@@ -20,7 +19,8 @@
                         <td>{{ $data->id }}</td>
                         <td>{{ $data->productprice_from->productunit->name }}</td>
                         <td>{{ $data->productprice_to->productunit->name }}</td>
-                        <td>{{ number_format($data->value) }}</td>
+                        <td>{{ $data->value }}</td>
+                        <td>1 {{ $data->productprice_from->productunit->name }} = {{ $data->value }} {{ $data->productprice_to->productunit->name }}</td>
                         <td>
                             <button 
                                 class="btn btn-sm btn-info btn-konversi-update"
@@ -56,9 +56,10 @@
                 <div class="mb-3">
                     <label for="product_price_id_from" class="form-label">DARI (SATUAN)</label>
                     <select name="product_price_id_from" class="form-control" id="product_price_id_from">
-                        <option value="">-- Pilih SATUAN --</option>
                         @foreach ($productprices as $dt)
-                                <option value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
+                                @if($dt->is_default)
+                                    <option value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
+                                @endif
                         @endforeach
                     </select>
                     @error('product_price_id_from') <p class="text-danger">{{ $message }}</p> @enderror
@@ -68,14 +69,16 @@
                     <select name="product_price_id_to" class="form-control" id="product_price_id_to">
                         <option value="">-- Pilih SATUAN --</option>
                         @foreach ($productprices as $dt)
-                                <option value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
+                                @if(!$dt->is_default)
+                                    <option value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
+                                @endif
                         @endforeach
                     </select>
                     @error('product_price_id_to') <p class="text-danger">{{ $message }}</p> @enderror
                 </div>  
                 <div class="mb-3">
                     <label for="price" class="form-label">Faktor Konversi</label>
-                    <input type="number" class="form-control" id="value" name="value">
+                    <input type="number" step=".01" class="form-control" id="value" name="value">
                     @error('value') <p class="text-danger">{{ $message }}</p> @enderror
                 </div>
             </div>
