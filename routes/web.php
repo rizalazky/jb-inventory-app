@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\ProductUnitConversionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -120,6 +121,16 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', [ProductPriceController::class, 'edit_post'])->name('productprice.edit_post');
         // Route::put('/{id}', [ProductPriceController::class, 'edit_post'])->name('productprice.edit_post');
         Route::get('/delete/{id}', [ProductPriceController::class, 'delete'])->name('productprice.delete');
+    });
+
+    // unit conversions
+    Route::middleware('role_or_permission:lihat produk')->prefix('konversi-satuan')->group(function () {
+        Route::get('/', [ProductUnitConversionController::class, 'index'])->name('unitconversions.index');
+        Route::post('/', [ProductUnitConversionController::class, 'create_post'])->name('unitconversions.create_post');
+        Route::post('/set-default', [ProductUnitConversionController::class, 'set_default_price'])->name('unitconversions.set_default_price');
+        Route::post('/update', [ProductUnitConversionController::class, 'edit_post'])->name('unitconversions.edit_post');
+        // Route::put('/{id}', [ProductUnitConversionController::class, 'edit_post'])->name('unitconversions.edit_post');
+        Route::get('/delete/{id}', [ProductUnitConversionController::class, 'delete'])->name('unitconversions.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');

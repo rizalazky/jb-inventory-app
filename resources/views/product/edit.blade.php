@@ -67,6 +67,11 @@
                     'productprices' => $product->productprices,
                     'productunits' => $product_units,
                 ])
+                @include('conversionproductunit.index', [
+                    'product_id'=>$product->id,
+                    'productprices' => $product->productprices,
+                    'unitconversions' => $product->unitconversions,
+                ])
             </div>
         </div>
     </div>

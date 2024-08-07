@@ -22,8 +22,8 @@ class Product extends Model
         return $this->hasMany(ProductPrice::class);
     }
 
-    // public function unitconversion():HasMany
-    // {
-    //     return $this->hasMany(UnitConver::class);
-    // }
+    public function unitconversions():HasMany
+    {
+        return $this->hasMany(UnitConversion::class);
+    }
 }
