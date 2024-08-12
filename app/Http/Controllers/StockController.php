@@ -58,10 +58,10 @@ class StockController extends Controller
     }
 
     public function in(){
-        return view('stock.create');
+        return view('stock.create',['type'=>'in']);
     }
     
     public function out(){
-        return view('stock.create');
+        return view('stock.create',['type'=>'out']);
     }
 }

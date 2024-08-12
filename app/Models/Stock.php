@@ -34,7 +34,11 @@ class Stock extends Model
         static::created(function (Stock $stock) {
             $product = $stock->product;
             $quantity= $stock->get_quantity($stock);
-            $product->stock += $quantity;
+            if($stock->type == 'in'){
+                $product->stock += $quantity;
+            }else{
+                $product->stock -= $quantity;
+            }
             $product->save();
         });
 

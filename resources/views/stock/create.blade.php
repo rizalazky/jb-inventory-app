@@ -11,7 +11,7 @@
                 {{ __('STOK MASUK FORM') }}
                 </div>
                 <div class="card-body">
-                    <input type="hidden" name="type" value="in">
+                    <input type="hidden" name="type" value="{{ $type }}">
                     <div class="mb-3">
                         <label for="product_id" class="form-label">Product</label>
                         <select id="product_id" name="product_id" class="form-control">
