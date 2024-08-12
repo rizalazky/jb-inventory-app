@@ -27,7 +27,7 @@ class SalesDataTable extends DataTable
  
     public function query(Sales $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where('supplier_id',$this->supplier_id)->newQuery();
     }
  
     public function html(): HtmlBuilder

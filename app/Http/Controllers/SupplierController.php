@@ -55,7 +55,7 @@ class SupplierController extends Controller
         confirmDelete($title, $text);
         
         $supplier = Supplier::find($id);
-        return $dataTable->render('supplier.detail',[
+        return $dataTable->with('supplier_id', $id)->render('supplier.detail',[
             'supplier' => $supplier
         ]);
     }
