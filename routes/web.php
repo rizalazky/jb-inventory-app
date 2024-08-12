@@ -138,8 +138,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/in', [StockController::class, 'in'])->name('stock.in');
         Route::post('/', [StockController::class, 'store'])->name('stock.store');
         Route::get('/out', [StockController::class, 'out'])->name('stock.out');
+        Route::get('/edit/{id}', [StockController::class, 'edit'])->name('stock.edit');
+        Route::put('/edit/{id}', [StockController::class, 'editput'])->name('stock.editput');
         Route::get('/search', [StockController::class, 'search'])->name('stock.search');
         Route::get('/history', [StockController::class, 'history'])->name('stock.index');
+        Route::delete('/delete/{id}', [StockController::class, 'delete'])->name('stock.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');

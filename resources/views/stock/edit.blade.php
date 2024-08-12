@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">   
-            {{ __('Manage Users') }}
+            {{ __('STOK') }}
     </x-slot>
 
     <div class="container-fluid">
@@ -9,30 +9,33 @@
             @csrf
             <div class="card">
                 <div class="card-header">
-                {{ __('Update User') }}
+                {{ __('STOK MASUK FORM') }}
                 </div>
                 <div class="card-body">
-                    <input type="hidden" value="{{ $user->id }}" name="id">
+                    <input type="hidden" name="type" value="{{ $data->type }}">
+                    <input type="hidden" name="id" value="{{ $data->id }}">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" value="{{ $user->email }}" name="email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" value="{{ $user->name }}" name="name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Role</label>
-                        <select name="role" class="form-control" id="role">
-                        <option>-- Pilih Role --</option>
-                        @foreach ($roles as $role)
-                            @if($user->roles->isNotEmpty() && $user->roles->first()->name == $role->name)
-                                <option value="{{ $role->name }}" selected>{{ $role->name }}</option>
-                            @else
-                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                            @endif
-                        @endforeach
+                        <label for="product_id" class="form-label">Product</label>
+                        <select id="product_id" name="product_id" class="form-control" value="{{ $data->product_id }}" disabled>
+                            <option value="{{ $data->product_id }}" selected="selected">{{ $data->product->name }}</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product_price_id" class="form-label">Satuan</label>
+                        <select id="product_price_id" name="product_price_id" class="form-control">
+                            @foreach($data->product->productprices as $proprice)
+                                <option value="{{ $proprice->id }}" @selected($data->product_price_id == $proprice->id)>{{ $proprice->productunit->name }} {{ $proprice->is_default ? ' - DEFAULT' : '' }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" value="{{ $data->quantity }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Catatan</label>
+                       <textarea name="notes" id="notes" class="form-control">{{ $data->notes }}</textarea>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -41,4 +44,10 @@
             </div>
         </form>
     </div>
+    @push('js')
+        
+        <script defer>
+            
+        </script>
+    @endpush
 </x-app-layout>

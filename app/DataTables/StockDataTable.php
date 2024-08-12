@@ -27,7 +27,7 @@ class StockDataTable extends DataTable
  
     public function query(Stock $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->with('product','productprice.productunit','user')->newQuery();
     }
  
     public function html(): HtmlBuilder
@@ -54,12 +54,21 @@ class StockDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('product_id'),
-            Column::make('product_price_id'),
-            Column::make('type'),
+            Column::computed('product')
+                        ->title('Product')
+                        ->data('product.name') // Assuming 'name' is the field you want to display from the Product model
+                        ->name('product.name'),
             Column::make('quantity'),
+            Column::computed('productprice')
+                        ->title('Satuan')
+                        ->data('productprice.productunit.name') // Assuming 'name' is the field you want to display from the Product model
+                        ->name('productprice.productunit.name'),
+            Column::make('type'),
             Column::make('notes'),
-            Column::make('user_by'),
+            Column::computed('users')
+                    ->title('User')
+                    ->data('user.name')
+                    ->name('user.name'),
             Column::computed('action')
                     ->exportable(false)
                     ->printable(false)

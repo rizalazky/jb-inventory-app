@@ -33,29 +33,50 @@ class Stock extends Model
     {
         static::created(function (Stock $stock) {
             $product = $stock->product;
-            $quantity= $stock->get_quantity($stock);
-            if($stock->type == 'in'){
+            $quantity = $stock->get_quantity($stock);
+            if ($stock->type == 'in') {
                 $product->stock += $quantity;
-            }else{
+            } else {
                 $product->stock -= $quantity;
             }
             $product->save();
         });
 
         static::updated(function (Stock $stock) {
-            $originalQuantity = $stock->getOriginal('quantity');
+             // Get the original Stock instance
+             $originalStock = new Stock($stock->getOriginal());
+
+            // Get the original quantity using the get_quantity method
+            $originalQuantity = $originalStock->get_quantity($originalStock);
+
             $product = $stock->product;
-            $quantity= $stock->get_quantity($stock);
-            $product->stock += ($quantity - $originalQuantity);
+            $newQuantity = $stock->get_quantity($stock);
+
+            // Revert the original stock change
+            if ($stock->type == 'in') {
+                $product->stock -= $originalQuantity;
+                $product->stock += $newQuantity;
+            } else {
+                $product->stock += $originalQuantity;
+                $product->stock -= $newQuantity;
+            }
+
             $product->save();
         });
 
         static::deleted(function (Stock $stock) {
             $product = $stock->product;
-            $product->stock -= $stock->quantity;
+            $quantity = $stock->get_quantity($stock);
+            if ($stock->type == 'in') {
+                $product->stock -= $quantity;
+            } else {
+                $product->stock += $quantity;
+            }
             $product->save();
         });
     }
+
+
 
     public function product() : BelongsTo
     {
@@ -65,5 +86,10 @@ class Stock extends Model
     public function productprice():BelongsTo
     {
         return $this->belongsTo(ProductPrice::class,'product_price_id','id');
+    }
+
+    public function user():BelongsTo
+    {
+        return $this->belongsTo(User::class,'user_by','id');
     }
 }

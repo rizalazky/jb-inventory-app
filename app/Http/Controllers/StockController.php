@@ -15,9 +15,10 @@ Use Alert;
 class StockController extends Controller
 {
     public function history(StockDataTable $dataTable){
-        $title = 'Delete User!';
-        $text = "Are you sure you want to delete?";
+        $title = 'Hapus Data Stok!';
+        $text = "Yakin hapus data?";
         confirmDelete($title, $text);
+
         
         return $dataTable->render('stock.index');
     }
@@ -63,5 +64,32 @@ class StockController extends Controller
     
     public function out(){
         return view('stock.create',['type'=>'out']);
+    }
+
+    public function edit($id){
+        $data = Stock::find($id);
+        return view('stock.edit',['data'=>$data]);
+    }
+
+    public function editput(Request $request)
+    {
+        
+        $data = Stock::find($request->id);
+        $data->product_price_id = $request->product_price_id;
+        $data->quantity = $request->quantity;
+        $data->notes = $request->notes;
+        $data->save();
+
+        Alert::success('Well done!', 'Role Updated!');
+
+        return redirect()->route('stock.index');
+    }
+
+    public function delete($id){
+        // $users = User::user('writer')->get();
+        $supplier = Stock::find($id)->delete();
+        Alert::success('Oke!', 'Data berhasil dihapus!');
+
+        return redirect()->route('stock.index');
     }
 }
