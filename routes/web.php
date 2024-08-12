@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductUnitConversionController;
+use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -131,6 +132,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', [ProductUnitConversionController::class, 'edit_post'])->name('unitconversions.edit_post');
         // Route::put('/{id}', [ProductUnitConversionController::class, 'edit_post'])->name('unitconversions.edit_post');
         Route::get('/delete/{id}', [ProductUnitConversionController::class, 'delete'])->name('unitconversions.delete');
+    });
+
+    Route::middleware('role_or_permission:lihat produk')->prefix('stok')->group(function () {
+        Route::get('/in', [StockController::class, 'in'])->name('stock.in');
+        Route::post('/', [StockController::class, 'store'])->name('stock.store');
+        Route::get('/out', [StockController::class, 'out'])->name('stock.out');
+        Route::get('/search', [StockController::class, 'search'])->name('stock.search');
+        Route::get('/history', [StockController::class, 'history'])->name('stock.index');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');

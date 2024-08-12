@@ -69,6 +69,7 @@ class ProductDataTable extends DataTable
     {
         return [
             Column::make('id'),
+            Column::make('code'),
             Column::make('name'),
             Column::make('description'),
             Column::make('stock'),

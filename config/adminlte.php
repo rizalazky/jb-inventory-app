@@ -395,8 +395,31 @@ return [
         [
             'text' => 'TRANSAKSI',
             'icon' => 'fas fa-fw fa-table',
-            'url' => '#',
+            'url' => '/transaksi',
             'can' => 'lihat transaksi masuk',
+        ],
+        [
+            'text' => 'STOK',
+            'icon' => 'fas fa-fw fa-table',
+            'url' => '#',
+            'can' => 'manage stok',
+            'submenu' => [
+                [
+                    'text' => 'STOK  MASUK',
+                    'url' => '/stok/in',
+                    'can' => 'lihat role',
+                ],
+                [
+                    'text' => 'STOK KELUAR',
+                    'url' => '/stok/out',
+                    'can' => 'lihat user',
+                ],
+                [
+                    'text' => 'HISTORY STOK',
+                    'url' => '/stok/history',
+                    'can' => 'lihat akses',
+                ],
+            ]
         ],
         [
             'text' => 'LAPORAN',
@@ -501,17 +524,18 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+                    'asset' => true,
+                    'defer' =>true,
+                    'location' => 'vendor/select2/js/select2.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+                    'asset' => true,
+                    'location' => 'vendor/select2/css/select2.min.css',
                 ],
             ],
         ],

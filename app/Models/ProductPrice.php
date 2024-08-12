@@ -27,15 +27,15 @@ class ProductPrice extends Model
         return $this->hasMany(UnitConversion::class, 'product_price_id_to');
     }
 
-    public function convert_stock($targetUnitId,$value){
-        $conversion = $this->unitconversions_to()
-                    // ->where('product_price_id_from',$this->id)
-                    // ->where('product_price_id_to', $targetUnitId)
-                    ->first();
-        // return $conversion;
-
+    public function convert_stock($targetUnitId,$value,$isReverse=false){
+        $conversion = $this->unitconversions_to()->first();
+        
         if ($conversion) {
-            return $value * $conversion->value;
+            if($isReverse){
+                return $value / $conversion->value;
+            }else{
+                return $value * $conversion->value;
+            }
         }
 
         return null;
