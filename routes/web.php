@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/create', [RoleController::class, 'create_post'])->name('role.create_post');
         Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role.edit');
         Route::put('/edit/{id}', [RoleController::class, 'edit_post'])->name('role.edit_post');
+        Route::put('/permission', [RoleController::class, 'permission'])->name('role.permission');
         Route::delete('/delete/{id}', [RoleController::class, 'delete'])->name('role.delete');
     });
     // user
@@ -134,7 +135,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/delete/{id}', [ProductUnitConversionController::class, 'delete'])->name('unitconversions.delete');
     });
 
-    Route::middleware('role_or_permission:lihat produk')->prefix('stok')->group(function () {
+    Route::middleware('role_or_permission:lihat stok')->prefix('stok')->group(function () {
         Route::get('/in', [StockController::class, 'in'])->name('stock.in');
         Route::post('/', [StockController::class, 'store'])->name('stock.store');
         Route::get('/out', [StockController::class, 'out'])->name('stock.out');

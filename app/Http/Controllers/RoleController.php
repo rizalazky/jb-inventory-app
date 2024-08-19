@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\View\View;
 use App\DataTables\RoleDataTable;
 Use Alert;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -37,9 +39,36 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::find($id);
+        $permissions = Permission::all();
+        $groupedPermissions = $permissions->groupBy(function($permission) {
+            // Split the permission name into action and entity
+            list($action, $entity) = explode(' ', $permission->name, 2);
+            return $entity;
+        });
+
+
+        // dd($groupedPermissions);
         return view('role.edit', [
-            'role' => $role
+            'role' => $role,
+            'permissions'=> $groupedPermissions,
+            'user'=> Auth::user()
         ]);
+    }
+
+    public function permission(Request $request){
+        $role_id= $request->role_id;
+        $permission_name = $request->permission_name;
+        $action = $request->action;
+
+
+        $role= Role::find($role_id);
+        if($action){
+            $role->givePermissionTo($permission_name);
+        }else{
+            $role->revokePermissionTo($permission_name);
+        }
+
+        return redirect()->route('role.edit',[ 'id'=>$role_id]);
     }
 
     public function edit_post(Request $request)
