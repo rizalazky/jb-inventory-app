@@ -395,8 +395,25 @@ return [
         [
             'text' => 'TRANSAKSI',
             'icon' => 'fas fa-fw fa-table',
-            'url' => '/transaksi',
+            'url' => '#',
             'can' => 'lihat transaksi masuk',
+            'submenu' => [
+                [
+                    'text' => 'PENJUALAN',
+                    'url' => '/transaksi/penjualan',
+                    'can' => 'lihat transaksi keluar',
+                ],
+                [
+                    'text' => 'PEMBELIAN',
+                    'url' => '/transaksi/pembelian',
+                    'can' => 'lihat transaksi masuk',
+                ],
+                [
+                    'text' => 'HISTORY',
+                    'url' => '/transaksi/history',
+                    'can' => 'lihat history transaksi',
+                ],
+            ]
         ],
         [
             'text' => 'STOK',
@@ -407,17 +424,17 @@ return [
                 [
                     'text' => 'STOK  MASUK',
                     'url' => '/stok/in',
-                    'can' => 'lihat role',
+                    'can' => 'lihat stok',
                 ],
                 [
                     'text' => 'STOK KELUAR',
                     'url' => '/stok/out',
-                    'can' => 'lihat user',
+                    'can' => 'lihat stok',
                 ],
                 [
                     'text' => 'HISTORY STOK',
                     'url' => '/stok/history',
-                    'can' => 'lihat akses',
+                    'can' => 'lihat stok',
                 ],
             ]
         ],

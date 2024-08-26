@@ -47,6 +47,17 @@ class SupplierController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $term = $request->input('term');
+
+        $results = Supplier::where('name', 'LIKE', '%' . $term . '%')
+                    // ->orWhere('code','LIKE','%'.$term.'%')
+                    ->get();
+
+        return response()->json($results);
+    }
+
     public function detail($id, SalesDataTable $dataTable)
     {
 

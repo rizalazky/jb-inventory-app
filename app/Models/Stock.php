@@ -13,8 +13,8 @@ class Stock extends Model
         "product_id",
         "product_price_id",
         "type",
-        // "transaction_id",
-        // "transaction_detail_id",
+        "transaction_id",
+        "transaction_detail_id",
         "quantity",
         "notes",
         "user_by"
@@ -86,6 +86,16 @@ class Stock extends Model
     public function productprice():BelongsTo
     {
         return $this->belongsTo(ProductPrice::class,'product_price_id','id');
+    }
+
+    public function transaction_detail():BelongsTo
+    {
+        return $this->belongsTo(TransactionDetail::class,'transaction_detail_id','id');
+    }
+
+    public function transaction():BelongsTo
+    {
+        return $this->belongsTo(TransactionDetail::class,'transaction_id','id');
     }
 
     public function user():BelongsTo

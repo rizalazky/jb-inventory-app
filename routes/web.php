@@ -13,6 +13,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductUnitConversionController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [CustomerController::class, 'create'])->name('customer.create');
         Route::post('/create', [CustomerController::class, 'create_post'])->name('customer.create_post');
         Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('customer.edit');
+        Route::get('/search', [CustomerController::class, 'search'])->name('customer.search');
         Route::put('/edit/{id}', [CustomerController::class, 'edit_post'])->name('customer.edit_post');
         Route::delete('/delete/{id}', [CustomerController::class, 'delete'])->name('customer.delete');
     });
@@ -76,6 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/detail/{id}', [SupplierController::class, 'detail'])->name('supplier.detail');
         Route::put('/edit/{id}', [SupplierController::class, 'edit_post'])->name('supplier.edit_post');
         Route::delete('/delete/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
+        Route::get('/search', [SupplierController::class, 'search'])->name('supplier.search');
     });
     // sales
     Route::middleware('role_or_permission:lihat sales')->prefix('sales')->group(function () {
@@ -144,6 +147,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/search', [StockController::class, 'search'])->name('stock.search');
         Route::get('/history', [StockController::class, 'history'])->name('stock.index');
         Route::delete('/delete/{id}', [StockController::class, 'delete'])->name('stock.delete');
+    });
+
+    Route::middleware('role_or_permission:lihat transaksi')->prefix('transaksi')->group(function () {
+        Route::get('/pembelian', [TransactionController::class, 'in'])->name('transaction.in');
+        Route::post('/save', [TransactionController::class, 'store'])->name('transaction.store');
+        Route::get('/penjualan', [TransactionController::class, 'out'])->name('transaction.out');
+        Route::get('/edit/{id}', [TransactionController::class, 'edit'])->name('transaction.edit');
+        Route::put('/edit/{id}', [TransactionController::class, 'editput'])->name('transaction.editput');
+        Route::get('/history', [TransactionController::class, 'history'])->name('transaction.index');
+        Route::delete('/delete/{id}', [TransactionController::class, 'delete'])->name('transaction.delete');
     });
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');
