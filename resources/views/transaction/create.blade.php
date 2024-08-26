@@ -59,7 +59,7 @@
                                 </div> -->
                             </div>
                             
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="MyTable">
                                 <thead>
                                     <th>KODE</th>
                                     <th>PRODUK</th>
@@ -69,6 +69,7 @@
                                     <th>SUB TOTAL</th>
                                     <th>DISKON</th>
                                     <th>TOTAL</th>
+                                    <th></th>
                                 </thead>
                                 <tbody id="product-tbody">
                                     <tr>
@@ -83,7 +84,7 @@
                                     <th>QTY</th>
                                     <th>SUB TOTAL</th>
                                     <th>DISKON</th>
-                                    <th>TOTAL</th>
+                                    <th></th>
                                 </tfoot>
                             </table>
                         </div>
@@ -205,6 +206,10 @@
                                 <td>
                                     <input type='number' value="${ priceDefault * 1 || 0 }" disabled class="form-control" id="product-total-${product.code}"/>
                                 </td>
+                                <td>
+                                    <button data-code="${product.code}" class="btn btn-danger btn-sm btn-delete-item-detail" data-confirm-delete="true"><i class="fas fa-fw fa-trash"></i></button>
+                                </td>
+
                             </tr>`;
 
                             // changeProductSubTotal(product.code)
@@ -345,10 +350,27 @@
                         allowClear: true
                     });
 
+                    $("#MyTable").on("click", ".btn-delete-item-detail", function() {
+                        let code = $(this).data('code');
+                        const index = productList.findIndex(item => item.code == code);
+
+                        if (index !== -1) {
+                            productList.splice(index, 1);
+                        }
+
+                        console.log(productList)
+                        $(this).closest("tr").remove();
+                    });
+
                     $('#product_id').on('select2:select', function (e) {
                         var data = e.params.data;
+                       
                         // let productprices = data.productprices;
-                        
+                        let checkIfExist = productList.find(list =>{return list.code == data.item.code});
+                        if(checkIfExist){
+                            alert('Item sudah ditambahkan');
+                            return false;
+                        }
                         productList.push(data.item)
                         generateTable()
                     });
