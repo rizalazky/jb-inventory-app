@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
@@ -33,7 +34,7 @@ class Transaction extends Model
 
         // Determine the next sequence number
         if ($lastTransaction) {
-            $lastSequence = intval(substr($lastTransaction->transaction_no, -5));
+            $lastSequence = intval(substr($lastTransaction->transaction_number, -5));
             $nextSequence = $lastSequence + 1;
         } else {
             $nextSequence = 1;
@@ -61,6 +62,21 @@ class Transaction extends Model
     public function transaction_details():HasMany
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function user():BelongsTo
+    {
+        return $this->belongsTo(User::class,'user_by','id');
+    }
+
+    public function customer():BelongsTo
+    {
+        return $this->belongsTo(Customer::class,'customer_id','id');
+    }
+
+    public function supplier():BelongsTo
+    {
+        return $this->belongsTo(Supplier::class,'supplier_id','id');
     }
     
 }

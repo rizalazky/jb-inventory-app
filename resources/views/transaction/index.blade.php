@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">   
-            {{ __('Stock In') }}
+            {{ __('History Transaksi') }}
     </x-slot>
 
     <div class="container-fluid">

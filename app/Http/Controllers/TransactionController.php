@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
  
-use App\DataTables\StockDataTable;
+use App\DataTables\TransactionDataTable;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Product;
@@ -16,8 +16,8 @@ Use Alert;
  
 class TransactionController extends Controller
 {
-    public function history(StockDataTable $dataTable){
-        $title = 'Hapus Data Stok!';
+    public function history(TransactionDataTable $dataTable){
+        $title = 'Hapus Transaksi!';
         $text = "Yakin hapus data?";
         confirmDelete($title, $text);
 
@@ -100,14 +100,14 @@ class TransactionController extends Controller
     }
 
     public function edit($id){
-        $data = Stock::find($id);
-        return view('stock.edit',['data'=>$data]);
+        $data = Transaction::with(['transaction_details.product.productprices.productunit','supplier'])->find($id);
+        return view('transaction.edit',['data'=>$data]);
     }
 
     public function editput(Request $request)
     {
         
-        $data = Stock::find($request->id);
+        $data = Transaction::find($request->id);
         $data->product_price_id = $request->product_price_id;
         $data->quantity = $request->quantity;
         $data->notes = $request->notes;
