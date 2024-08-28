@@ -36,6 +36,12 @@ class TransactionDetail extends Model
             ]);
             $stock->save();
         });
+
+        static::deleting(function ($transactionDetail) {
+            foreach ($transactionDetail->stocks as $stock) {
+                $stock->delete(); // This will trigger the Stock's deleted event
+            }
+        });
     }
 
     public function transaction(): BelongsTo

@@ -57,6 +57,13 @@ class Transaction extends Model
         static::creating(function ($transaction) {
             $transaction->transaction_number = self::generateTransactionNo();
         });
+
+        static::deleting(function ($transaction) {
+            // Retrieve and delete all related TransactionDetail records
+            $transaction->transaction_details->each(function ($detail) {
+                $detail->delete(); // Triggers the deleting event in TransactionDetail model
+            });
+        });
     }
 
     public function transaction_details():HasMany
@@ -77,6 +84,11 @@ class Transaction extends Model
     public function supplier():BelongsTo
     {
         return $this->belongsTo(Supplier::class,'supplier_id','id');
+    }
+
+    public function stocks():HasMany
+    {
+        return $this->hasMany(Stock::class)->onDelete('cascade');;
     }
     
 }

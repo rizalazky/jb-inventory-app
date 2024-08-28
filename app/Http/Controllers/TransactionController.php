@@ -120,9 +120,9 @@ class TransactionController extends Controller
 
     public function delete($id){
         // $users = User::user('writer')->get();
-        $supplier = Stock::find($id)->delete();
+        $supplier = Transaction::find($id)->delete();
         Alert::success('Oke!', 'Data berhasil dihapus!');
 
-        return redirect()->route('stock.index');
+        return redirect()->route('transaction.index');
     }
 }
