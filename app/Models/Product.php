@@ -17,6 +17,44 @@ class Product extends Model
         'stock',
     ];
 
+    public static function generateProductCode()
+    {
+        // Generate the date part
+        $date = now()->format('Ymd'); // e.g., '20240825'
+
+        // Get the last transaction number for the day
+        $lastProduct = self::whereDate('created_at', now()->format('Y-m-d'))
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // Determine the next sequence number
+        if ($lastProduct) {
+            $lastSequence = intval(substr($lastProduct->code, -5));
+            $nextSequence = $lastSequence + 1;
+        } else {
+            $nextSequence = 1;
+        }
+
+        // Format the sequence number as a 5-digit string
+        $sequence = str_pad($nextSequence, 5, '0', STR_PAD_LEFT);
+
+        
+        $productCode = 'ITM-' . $date . '-' . $sequence;
+
+        return $productCode;
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Automatically generate the transaction number before saving
+        static::creating(function ($product) {
+            $product->code = self::generateProductCode();
+        });
+
+    }
+
     public function productprices():HasMany
     {
         return $this->hasMany(ProductPrice::class);

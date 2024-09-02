@@ -14,7 +14,7 @@
                     <div class="row">
                         <div class="mb-3 col-6">
                             <label for="name" class="form-label">Kode Produk/Barcode</label>
-                            <input type="text" class="form-control" id="code" name="code">
+                            <input type="text" class="form-control" disabled placeholder="AUTO GENERATED" id="code" name="code">
                             @error('code') <p class="text-danger">{{ $message }}</p> @enderror
                         </div>
                         <div class="mb-3 col-6">
@@ -38,6 +38,23 @@
                         <div class="mb-3 col-6">
                             <label for="name" class="form-label">Stok Awal</label>
                             <input type="number" class="form-control" id="stock" name="stock">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <label for="name" class="form-label">Satuan</label>
+                            <select name="unit_id" class="form-control" id="">
+                                <option value="">-- Pilih Satuan Produk --</option>
+                                @foreach ($units as $cat)
+                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('unit_id') <p class="text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="name" class="form-label">Harga Jual</label>
+                            <input type="number" class="form-control" id="price" name="price">
+                            @error('price') <p class="text-danger">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="mb-3">
