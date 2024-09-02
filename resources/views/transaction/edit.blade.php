@@ -23,11 +23,13 @@
                         <div class="col-4">
                         @if($data->type == 'out')   
                             <label for="date">Customer</label>
-                            <select name="" class="form-control" id="customer_id"></select> 
+                            <select name="" class="form-control" id="customer_id">
+                                <option value="{{ $data->customer_id }}" selected>{{ $data->customer->name }}</option>
+                            </select> 
                         @else
                             <label for="date">Supplier</label>
                             <select name="" class="form-control" id="supplier_id">
-                                <option value="{{ $data->supplier_id }}">{{ $data->supplier->name }}</option>
+                                <option value="{{ $data->supplier_id }}" selected>{{ $data->supplier->name }}</option>
                             </select> 
                         @endif
                         </div>
@@ -93,7 +95,7 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="discount" class="form-label">Diskon</label>
-                                <input type="number" name="discount" value="0" value="{{ $data->discount }}" id="discount" class="form-control">
+                                <input type="number" name="discount" value="{{ $data->discount }}" id="discount" class="form-control">
                             </div>
                             
                         </div>
@@ -168,14 +170,22 @@
                             let optionsHTML = ``
                             let priceDefault;
                             let productPriceDefault;
+
+                            console.log('product',product)
                             product?.product?.productprices?.map(price=>{
-                                if(price.id == product.product_price_id){
-                                    priceDefault = price.price;
-                                    productPriceDefault = price.id;
-                                }
-                                let option = `<option data-price="${price.price}" value='${price.id}' ${price.id == product.product_price_id  && 'selected'}>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
-                                optionsHTML = optionsHTML + option;
+                                
+                                    if(price.id == product.product_price_id){
+                                        priceDefault = price.price;
+                                        productPriceDefault = price.id;
+                                    }
+                                    let option = `<option data-price="${price.price}" value='${price.id}' ${price.id == product.product_price_id  && 'selected'}>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
+                                    optionsHTML = optionsHTML + option;
+
+                                
                             })
+
+                            let subTotal = priceDefault * product.qty;
+                            let total = subTotal - product.discount
                             html += `<tr>
                                 <td>${product.product.code}</td>
                                 <td>${product.product.name}</td>
@@ -186,16 +196,16 @@
                                     <input type='number' value="${priceDefault}" class="form-control product-price" disabled id="product-price-${product.product.code}"/>
                                 </td>
                                 <td>
-                                    <input type='number' value="1" class="form-control product-qty" id="product-qty-${product.product.code}" data-code="${product.product.code}"/>
+                                    <input type='number' value="${product.qty}" class="form-control product-qty" id="product-qty-${product.product.code}" data-code="${product.product.code}"/>
                                 </td>
                                 <td>
-                                    <input type='number' value="${ priceDefault * 1 || 0 }" disabled class="form-control" id="product-sub-total-${product.product.code}"/>
+                                    <input type='number' value="${ subTotal || 0 }" disabled class="form-control" id="product-sub-total-${product.product.code}"/>
                                 </td>
                                 <td>
-                                    <input type='number' class="form-control product-discount" value="0" id="product-discount-${product.product.code}" data-code="${product.product.code}"/>
+                                    <input type='number' class="form-control product-discount" value="${product.discount}" id="product-discount-${product.product.code}" data-code="${product.product.code}"/>
                                 </td>
                                 <td>
-                                    <input type='number' value="${ priceDefault * 1 || 0 }" disabled class="form-control" id="product-total-${product.product.code}"/>
+                                    <input type='number' value="${ total || 0 }" disabled class="form-control" id="product-total-${product.product.code}"/>
                                 </td>
                                 <td>
                                     <button data-code="${product.product.code}" class="btn btn-danger btn-sm btn-delete-item-detail" data-confirm-delete="true"><i class="fas fa-fw fa-trash"></i></button>
@@ -214,6 +224,7 @@
                     generateTable();
 
                     function changeProductSubTotal(code){
+                        
                         const qty = document.getElementById('product-qty-'+code)
                         const price = document.getElementById('product-price-'+code)
                         const discount = document.getElementById('product-discount-'+code)
@@ -224,7 +235,7 @@
                         let subTotal = Number(price.value) * Number(qty.value);
                         let total = subTotal - Number(discount.value);
                         // update productList
-                        let productListSelectedIndex = productList.findIndex((product)=>{return product.code === code})
+                        let productListSelectedIndex = productList.findIndex((product)=>{return product.product.code === code})
 
                         productList[productListSelectedIndex].qty = qty.value;
                         productList[productListSelectedIndex].price = price.value;
@@ -340,7 +351,7 @@
 
                     $("#MyTable").on("click", ".btn-delete-item-detail", function() {
                         let code = $(this).data('code');
-                        const index = productList.findIndex(item => item.code == code);
+                        const index = productList.findIndex(item => item.product.code == code);
 
                         if (index !== -1) {
                             productList.splice(index, 1);
@@ -352,25 +363,39 @@
 
                     $('#product_id').on('select2:select', function (e) {
                         var data = e.params.data;
+                        // console.log(data);
+                        // return false;
                        
                         // let productprices = data.productprices;
-                        let checkIfExist = productList.find(list =>{return list.code == data.item.code});
+                        let checkIfExist = productList.find(list =>{return list.product.code == data.item.code});
                         if(checkIfExist){
                             alert('Item sudah ditambahkan');
                             return false;
                         }
-                        productList.push(data.item)
+
+                       console.log(data)
+                        
+                        let dataToPush = {    
+                            discount: 0,
+                            price: data.item.productprices.find((price) => price.is_default)?.price,
+                            product: data.item,
+                            product_id: data.item.id,
+                            product_price_id: data.item.productprices.find((price) => price.is_default)?.id,
+                            qty: 1,
+                            total: 0,
+                        }
+                        productList.push(dataToPush)
                         generateTable()
                     });
 
                     async function saveTransaction(data){
                         // let url = 'http://localhost:8000/transaksi/save';
                         let crsfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                        let url = '/transaksi/save';
+                        let url = '/transaksi/edit/{{ $data->id }}';
 
                         $.ajax({
                             url: url,
-                            method: 'POST',
+                            method: 'PUT',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
@@ -408,7 +433,9 @@
                             total : $('#total').val(),
                         }
 
-                        console.log(data)
+                        // console.log(data);
+                        // return false;
+
 
                         saveTransaction(data)
                     })

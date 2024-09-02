@@ -91,6 +91,77 @@ class TransactionController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'type' => 'required',
+            'date' => 'bail|required',
+            // 'transaction_number' => 'bail|required',
+            'sub_total' => 'bail|required',
+            'discount' => 'bail|required',
+            'total' => 'bail|required',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Find the existing Transaction
+            $transaction = Transaction::findOrFail($id);
+
+            // Update the Transaction
+            $transaction->update([
+                'type' => $request->type,
+                'date' => $request->date,
+                'customer_id' => $request->customer_id,
+                'supplier_id' => $request->supplier_id,
+                //'transaction_number' => $request->transaction_number, // Ensure this field is handled properly
+                'sub_total' => $request->sub_total,
+                'discount' => $request->discount,
+                'total' => $request->total,
+                'user_by' => Auth::id(),
+            ]);
+
+            // Delete existing TransactionDetails
+            $transaction->transaction_details->each(function ($detail) {
+                $detail->delete(); // Triggers the deleting event in TransactionDetail model
+            });
+            
+
+            // Loop through the items and create new TransactionDetails
+            foreach ($request->items as $item) {
+                
+                $transactionDetail = new TransactionDetail([
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $item['product_id'],
+                    'product_price_id' => $item['product_price_id'],
+                    'price' => $item['price'],
+                    'qty' => $item['qty'],
+                    'discount' => $item['discount'],
+                ]);
+                $transactionDetail->save();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Transaction updated successfully!',
+                'transaction' => $transaction,
+                'transaction_details' => $transaction->transaction_details,
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating transaction: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
     public function in(){
         return view('transaction.create',['type'=>'in']);
     }
@@ -102,20 +173,6 @@ class TransactionController extends Controller
     public function edit($id){
         $data = Transaction::with(['transaction_details.product.productprices.productunit','supplier'])->find($id);
         return view('transaction.edit',['data'=>$data]);
-    }
-
-    public function editput(Request $request)
-    {
-        
-        $data = Transaction::find($request->id);
-        $data->product_price_id = $request->product_price_id;
-        $data->quantity = $request->quantity;
-        $data->notes = $request->notes;
-        $data->save();
-
-        Alert::success('Well done!', 'Role Updated!');
-
-        return redirect()->route('stock.index');
     }
 
     public function delete($id){

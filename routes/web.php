@@ -154,7 +154,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/save', [TransactionController::class, 'store'])->name('transaction.store');
         Route::get('/penjualan', [TransactionController::class, 'out'])->name('transaction.out');
         Route::get('/edit/{id}', [TransactionController::class, 'edit'])->name('transaction.edit');
-        Route::put('/edit/{id}', [TransactionController::class, 'editput'])->name('transaction.editput');
+        Route::put('/edit/{id}', [TransactionController::class, 'update'])->name('transaction.editput');
         Route::get('/history', [TransactionController::class, 'history'])->name('transaction.index');
         Route::delete('/delete/{id}', [TransactionController::class, 'delete'])->name('transaction.delete');
     });
