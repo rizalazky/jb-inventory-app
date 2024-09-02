@@ -84,11 +84,13 @@
                     'productprices' => $product->productprices,
                     'productunits' => $product_units,
                 ])
-                @include('conversionproductunit.index', [
-                    'product_id'=>$product->id,
-                    'productprices' => $product->productprices,
-                    'unitconversions' => $product->unitconversions,
-                ])
+                @if(count($product->productprices) > 1)
+                    @include('conversionproductunit.index', [
+                        'product_id'=>$product->id,
+                        'productprices' => $product->productprices,
+                        'unitconversions' => $product->unitconversions,
+                    ])
+                @endif
             </div>
         </div>
     </div>
