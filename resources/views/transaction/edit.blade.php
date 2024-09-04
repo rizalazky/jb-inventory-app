@@ -27,7 +27,9 @@
                         @if($data->type == 'out')   
                             <label for="date">Customer</label>
                             <select name="" class="form-control" id="customer_id">
-                                <option value="{{ $data->customer_id }}" selected>{{ $data->customer->name }}</option>
+                                @if($data->customer)
+                                    <option value="{{ $data->customer_id }}" selected>{{ $data->customer->name }}</option>
+                                @endif
                             </select> 
                         @else
                             <label for="date">Supplier</label>
@@ -110,10 +112,22 @@
 
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Catatan</label>
-                           <textarea name="notes" id="notes" class="form-control"></textarea>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="cash_paid" class="form-label">CASH</label>
+                                <input type="number" name="cash_paid" value="{{ $data->cash_paid }}" id="cash_paid" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="change" class="form-label">Kembali</label>
+                                <input type="number" name="change" value="{{ $data->change }}" id="change" disabled class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Catatan</label>
+                               <textarea name="notes" id="notes" class="form-control" rows="4">{{ $data->notes }}</textarea>
+                            </div>
                         </div>
                     </div>
                     
@@ -143,6 +157,7 @@
 
                     const setTransactionTotal = ()=>{
                         totalEl.value = (Number(subTotalEl.value) || 0) - (Number(discountEl.value) || 0);
+                        $('#total').trigger('change');
                     }
 
                     const setTransactionSubTotal = ()=>{
@@ -250,6 +265,8 @@
                         subTotalProduct.value = subTotal;
                         totalProduct.value = total;
 
+                        
+
                         setTransactionSubTotal()
                     }
 
@@ -323,6 +340,21 @@
                         placeholder: 'Search Customer',
                         allowClear: true
                     });
+
+                    $('#cash_paid').on('input',function(){
+                        let total = $('#total').val();
+                        let cash_paid = $('#cash_paid').val();
+
+                        $('#change').val(cash_paid - total);
+                    });
+
+                    $('#total').change(function(){
+                        console.log('fiure')
+                        let total = $('#total').val();
+                        let cash_paid = $('#cash_paid').val();
+
+                        $('#change').val(cash_paid - total);
+                    })
 
                     $('#supplier_id').select2({
                         theme: "bootstrap4",
@@ -470,6 +502,9 @@
                             sub_total : $('#sub_total').val(),
                             discount : $('#discount').val(),
                             total : $('#total').val(),
+                            cash_paid : $('#cash_paid').val(),
+                            change : $('#change').val(),
+                            notes : $('#notes').val(),
                         }
 
                         // console.log(data);

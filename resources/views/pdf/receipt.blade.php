@@ -76,7 +76,7 @@
         </div>
         
         <div class="transaction-info">
-            <p>{{ $transaction->created_at->format('Y-m-d H:i:s') }} <br>{{ $transaction->user->name }} <br>{{ $transaction->customer->name }}</p>
+            <p>{{ $transaction->created_at->format('Y-m-d H:i:s') }} <br>{{ $transaction->user->name }} <br>{{ $transaction->customer ? $transaction->customer->name : '' }}</p>
             <p class="receipt-number">No: {{ $transaction->transaction_number }}</p>
         </div>
 

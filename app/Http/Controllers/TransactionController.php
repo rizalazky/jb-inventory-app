@@ -34,6 +34,7 @@ class TransactionController extends Controller
             'sub_total' => 'bail|required',
             'discount' => 'bail|required',
             'total' => 'bail|required',
+            'cash_paid' => 'bail|required',
         ]);
 
         // return response()->json([
@@ -53,6 +54,9 @@ class TransactionController extends Controller
                 'sub_total' => $request->sub_total,
                 'discount' => $request->discount,
                 'total' => $request->total,
+                'cash_paid' => $request->cash_paid,
+                'change' => $request->change,
+                'notes' => $request->notes,
                 'user_by' => Auth::id(),
             ]);
             
@@ -101,6 +105,7 @@ class TransactionController extends Controller
             'sub_total' => 'bail|required',
             'discount' => 'bail|required',
             'total' => 'bail|required',
+            'cash_paid' => 'bail|required',
         ]);
 
         DB::beginTransaction();
@@ -119,6 +124,9 @@ class TransactionController extends Controller
                 'sub_total' => $request->sub_total,
                 'discount' => $request->discount,
                 'total' => $request->total,
+                'cash_paid' => $request->cash_paid,
+                'change' => $request->change,
+                'notes' => $request->notes,
                 'user_by' => Auth::id(),
             ]);
 

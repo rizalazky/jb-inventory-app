@@ -118,10 +118,22 @@
 
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Catatan</label>
-                           <textarea name="notes" id="notes" class="form-control"></textarea>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="cash_paid" class="form-label">CASH</label>
+                                <input type="number" name="cash_paid" id="cash_paid" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="change" class="form-label">Kembali</label>
+                                <input type="number" name="change" id="change" disabled class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Catatan</label>
+                               <textarea name="notes" id="notes" class="form-control" rows="4"></textarea>
+                            </div>
                         </div>
                     </div>
                     
@@ -252,6 +264,13 @@
 
                         setTransactionSubTotal()
                     }
+
+                    $('#cash_paid, #total').on('input',function(){
+                        let total = $('#total').val();
+                        let cash_paid = $('#cash_paid').val();
+
+                        $('#change').val(cash_paid - total);
+                    })
 
                     $('#product-tbody').on('change',function(e){
                         const target = e.target;
@@ -449,9 +468,10 @@
                             sub_total : $('#sub_total').val(),
                             discount : $('#discount').val(),
                             total : $('#total').val(),
+                            cash_paid : $('#cash_paid').val(),
+                            change : $('#change').val(),
+                            notes : $('#notes').val(),
                         }
-
-                        console.log(data)
 
                         saveTransaction(data)
                     })

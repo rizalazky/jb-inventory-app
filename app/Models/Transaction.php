@@ -19,6 +19,9 @@ class Transaction extends Model
         'sub_total',
         'discount',
         'total',
+        'cash_paid',
+        'change',
+        'notes',
         'user_by',
     ];
 
