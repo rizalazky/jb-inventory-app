@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="UTF-8">
-    <title>Karis Jaya Shop Receipt</title>
+    <title>{{ $setting->name }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,11 +67,13 @@
 <body>
     <div class="receipt-container">
         <div class="header">
-            <div class="shop-name">TB. JAYA BERKAH</div>
-            <div class="shop-address">Jl. Dr. Ir. H. Soekarno No.19, Medokan Semampir, Surabaya</div>
+            <!-- @if(isset($setting->logo))
+                <img src="{{ asset('storage/uploads/logos/' . $setting->logo) }}" alt="Current Logo" width="100">
+            @endif -->
+            <div class="shop-name">{{ $setting->name }}</div>
+            <div class="shop-address">{{ $setting->address }}</div>
             <div class="shop-contact">
-                No. Telp 0812345678<br>
-                16413520230802084636
+                No. Telp {{ $setting->phone }}
             </div>
         </div>
         

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Models\Setting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,7 @@ class PdfController extends Controller
     {
         // Fetch the transaction and related data
         $transaction = Transaction::with('transaction_details.product', 'customer')->findOrFail($id);
+        $setting = Setting::first();
 
         // Prepare the data for the receipt
         $receiptData = [
@@ -21,7 +23,7 @@ class PdfController extends Controller
         ];
 
         // Load the view and generate the PDF
-        $pdf = Pdf::loadView('pdf.receipt', ['transaction' => $transaction]);
+        $pdf = Pdf::loadView('pdf.receipt', ['transaction' => $transaction,'setting'=>$setting]);
 
         $pdf->setPaper([0, 0, 226.77, 651.18]); // Custom paper size in points (width: 80mm, height: 230mm approx)
         // $pdf->render();
