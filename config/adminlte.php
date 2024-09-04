@@ -446,7 +446,7 @@ return [
         ],
         ['header' => 'OTHER'],
         [
-            'text' => 'USER',
+            'text' => 'SETTING',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
             'can' => 'lihat user',
@@ -464,6 +464,11 @@ return [
                 [
                     'text' => 'AKSES',
                     'url' => '/akses',
+                    'can' => 'lihat akses',
+                ],
+                [
+                    'text' => 'CONFIG',
+                    'url' => '/config',
                     'can' => 'lihat akses',
                 ],
             ]

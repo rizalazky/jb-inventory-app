@@ -15,6 +15,7 @@ use App\Http\Controllers\ProductUnitConversionController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\ConfigController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -167,6 +168,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/config', [ConfigController::class, 'view'])->name('config.index');
+    Route::post('/config', [ConfigController::class, 'store'])->name('config.store');
+    // Route::delete('/config', [ConfigController::class, 'destroy'])->name('config.destroy');
 });
 
 require __DIR__.'/auth.php';
