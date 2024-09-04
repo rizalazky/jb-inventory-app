@@ -9,8 +9,11 @@
     </x-slot>
 
     <div class="container-fluid">
-       
-            <div class="card">
+        <div class="card">
+                <div class="card-header flex justify-content-end">
+                    <button type="button" id="btn-submit" class="btn btn-primary mr-2">Save</button>
+                    <button type="button" id="btn-print-receipt" class="btn btn-info">Cetak Struk</button>
+                </div>
     
                 <div class="card-body">
                     <div class="row">
@@ -116,9 +119,7 @@
                     
 
                 </div>
-                <div class="card-footer">
-                    <button type="button" id="btn-submit" class="btn btn-primary">Submit</button>
-                </div>
+                
             </div>
         
     </div>
@@ -360,6 +361,44 @@
                         console.log(productList)
                         $(this).closest("tr").remove();
                     });
+
+                    
+
+                    const printReceipt = () => {
+                        console.log('print');
+                        fetch(`/transaksi/pdf/preview/{{ $data->id }}`)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                // Create a URL for the PDF blob
+                                const url = URL.createObjectURL(blob);
+                                console.log('blob', url);
+
+                                // Embed the PDF in an iframe
+                                const iframe = document.createElement('iframe');
+                                iframe.style.display = 'none'; // Hide the iframe (optional)
+                                document.body.appendChild(iframe);
+                                iframe.src = url;
+
+                                // Trigger the print dialog
+                                iframe.onload = () => {
+                                    console.log('on load iframe');
+                                    iframe.contentWindow.print();
+
+                                    // Clean up by removing the iframe and revoking the URL
+                                    // iframe.contentWindow.onafterprint = () => {
+                                    //     document.body.removeChild(iframe);
+                                    //     URL.revokeObjectURL(url);
+                                    // };
+                                };
+                            })
+                            .catch(error => console.error('Error fetching PDF:', error));
+                    }
+
+                    $('#btn-print-receipt').click(function(){
+                        printReceipt();
+
+                    })
+
 
                     $('#product_id').on('select2:select', function (e) {
                         var data = e.params.data;

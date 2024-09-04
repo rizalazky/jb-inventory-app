@@ -393,7 +393,8 @@
                                 // if(!response.status){
                                 //     alert(resp)
                                 // }
-                                alert('Transaction saved successfully!');
+                                // alert('Transaction saved successfully!');
+                                printReceipt(response.transaction.id);
                             },
                             error: function(xhr, status, error) {
                                 if (xhr.status === 302) {
@@ -405,6 +406,36 @@
                                 }
                             }
                         });
+                    }
+
+                    const printReceipt = (transactionId) => {
+                        
+                        fetch(`/transaksi/pdf/preview/${transactionId}`)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                // Create a URL for the PDF blob
+                                const url = URL.createObjectURL(blob);
+                                console.log('blob', url);
+
+                                // Embed the PDF in an iframe
+                                const iframe = document.createElement('iframe');
+                                iframe.style.display = 'none'; // Hide the iframe (optional)
+                                document.body.appendChild(iframe);
+                                iframe.src = url;
+
+                                // Trigger the print dialog
+                                iframe.onload = () => {
+                                    console.log('on load iframe');
+                                    iframe.contentWindow.print();
+
+                                    // Clean up by removing the iframe and revoking the URL
+                                    // iframe.contentWindow.onafterprint = () => {
+                                    //     document.body.removeChild(iframe);
+                                    //     URL.revokeObjectURL(url);
+                                    // };
+                                };
+                            })
+                            .catch(error => console.error('Error fetching PDF:', error));
                     }
 
                     $('#btn-submit').on('click',function(e){

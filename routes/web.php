@@ -14,6 +14,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductUnitConversionController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -157,7 +158,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/edit/{id}', [TransactionController::class, 'update'])->name('transaction.editput');
         Route::get('/history', [TransactionController::class, 'history'])->name('transaction.index');
         Route::delete('/delete/{id}', [TransactionController::class, 'delete'])->name('transaction.delete');
+        Route::get('/pdf/preview/{id}', [PdfController::class, 'previewPdf']);
     });
+    
 
     Route::get('/akses',[PermissionController::class,'index'])->name('akses.index');
 
