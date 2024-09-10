@@ -438,12 +438,12 @@ return [
                 ],
             ]
         ],
-        [
-            'text' => 'LAPORAN',
-            'icon' => 'fas fa-fw fa-table',
-            'url' => '#',
-            'can' => 'lihat laporan',
-        ],
+        // [
+        //     'text' => 'LAPORAN',
+        //     'icon' => 'fas fa-fw fa-table',
+        //     'url' => '#',
+        //     'can' => 'lihat laporan',
+        // ],
         ['header' => 'OTHER'],
         [
             'text' => 'SETTING',
