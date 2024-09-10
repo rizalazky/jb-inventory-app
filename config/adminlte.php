@@ -323,11 +323,11 @@ return [
         //     'label_color' => 'success',
         // ],
         ['header' => 'MENU'],
-        // [
-        //     'text' => 'profile',
-        //     'url' => 'admin/settings',
-        //     'icon' => 'fas fa-fw fa-user',
-        // ],
+        [
+            'text' => 'Dashboard',
+            'url' => '/',
+            'icon' => 'fas fa-fw fa-home',
+        ],
         // [
         //     'text' => 'change_password',
         //     'url' => 'admin/settings',

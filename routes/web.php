@@ -16,6 +16,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,13 +35,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('/', [DashboardController::class,'index'])->name('dashboard.index');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
 
     // role
     Route::middleware('role_or_permission:lihat role')->prefix('role')->group(function () {
