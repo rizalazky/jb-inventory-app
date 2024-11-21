@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
                     <div class="card">
@@ -26,7 +26,7 @@
                                     <select name="category_id" class="form-control" id="role">
                                         <option value="">-- Pilih Kategori Produk --</option>
                                         @foreach ($categories as $cat)
-                                            @if($cat->id == $product->id)
+                                            @if($cat->id == $product->category_id)
                                                 <option value="{{ $cat->id }}" selected>{{ $cat->name }}</option>
                                             @else
                                                 <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -63,6 +63,14 @@
                                     <label for="name" class="form-label">Stok</label>
                                     <input type="text" class="form-control" disabled id="stock" value="{{ $product->stock }}">
                                 </div>
+                            </div>
+                            <div class="mb-3">
+                                @if(isset($product->image))
+                                    <img src="{{ asset('storage/uploads/products/images/' . $product->image) }}" alt="Current Logo" width="100">
+                                @endif
+                                
+                                <label for="image" class="form-label">Gambar Produk</label>
+                                <input type="file" name="image" id="image" value="{{ $product->image }}" class="form-control-file mt-3">
                             </div>
                             <div class="mb-3">
                                 <label for="name" class="form-label">Description</label>

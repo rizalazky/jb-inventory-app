@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="container-fluid">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card">
                 <div class="card-header">
@@ -56,6 +56,11 @@
                             <input type="number" class="form-control" id="price" name="price">
                             @error('price') <p class="text-danger">{{ $message }}</p> @enderror
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Gambar Produk</label>
+                        <input type="file" name="image" id="image" class="form-control-file mt-3">
+                        @error('image') <p class="text-danger">{{ $message }}</p> @enderror
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Description</label>
