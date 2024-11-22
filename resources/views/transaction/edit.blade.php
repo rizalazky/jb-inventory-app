@@ -11,7 +11,10 @@
     <div class="container-fluid">
         <div class="card">
                 <div class="card-header flex justify-content-end">
-                    <button type="button" id="btn-submit" class="btn btn-primary mr-2">Save</button>
+                    <button type="button" id="btn-new" class="btn btn-default mr-2">
+                        <a href="/transaksi/penjualan">Transaksi Baru</a>
+                    </button>
+                    <button type="button" id="btn-submit" class="btn btn-primary mr-2">Update</button>
                     <button type="button" id="btn-print-receipt" class="btn btn-info">Cetak Struk</button>
                 </div>
     
