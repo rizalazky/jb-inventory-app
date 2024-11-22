@@ -409,11 +409,12 @@
                             data: JSON.stringify(data),
                             success: function(response) {
                                 console.log('result', response);
+                                window.location.href = `/transaksi/edit/${response.transaction.id}`;
                                 // if(!response.status){
                                 //     alert(resp)
                                 // }
                                 // alert('Transaction saved successfully!');
-                                printReceipt(response.transaction.id);
+                                // printReceipt(response.transaction.id);
                             },
                             error: function(xhr, status, error) {
                                 if (xhr.status === 302) {
