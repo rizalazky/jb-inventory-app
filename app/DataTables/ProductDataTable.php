@@ -22,12 +22,18 @@ class ProductDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addColumn('image', function ($row) {
+                // Assuming the Product model has an `image` attribute with the file path
+                $imageUrl = asset('storage/uploads/products/images/' . $row->image); // Adjust path if necessary
+                return '<img src="' . $imageUrl . '" alt="' . $row->name . '" width="50" height="50">';
+            })
             ->addColumn('action', 'product.datatables.action')
             ->order(function ($query) {
                 if (request()->has('id')) {
                     $query->orderBy('id', 'asc');
                 }
             })
+            ->rawColumns(['image', 'action'])
             ->setRowId('id');
     }
 
@@ -69,6 +75,10 @@ class ProductDataTable extends DataTable
     {
         return [
             Column::make('id'),
+            Column::computed('image')
+                ->exportable(false)
+                ->printable(false)
+                ->addClass('text-center'),
             Column::make('code'),
             Column::make('name'),
             Column::make('description'),

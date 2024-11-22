@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -15,6 +16,7 @@ class Product extends Model
         'category_id',
         'description',
         'stock',
+        'image',
     ];
 
     public static function generateProductCode()
@@ -73,5 +75,10 @@ class Product extends Model
     public function unitconversions():HasMany
     {
         return $this->hasMany(UnitConversion::class);
+    }
+
+    public function productcategory(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategory::class,'category_id','id');
     }
 }

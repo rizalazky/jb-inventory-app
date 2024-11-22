@@ -37,6 +37,35 @@ class ProductController extends Controller
         ]);
     }
 
+    private function handle_upload(Request $request,Product $product){
+        
+        $filename = null;
+        try {
+            if ($request->hasFile('image')) {
+                // Get the file from the request
+                $file = $request->file('image');
+    
+                // Generate a unique name for the file before saving it
+                $filename = time() . '_' . $file->getClientOriginalName();
+    
+                // Save the file in the 'uploads/logos' directory
+                $file->storeAs('uploads/products/images', $filename, 'public');
+    
+                // If updating, delete the old logo if it exists
+                if ($product->image && \Storage::disk('public')->exists('uploads/products/images/' . $product->image)) {
+                    \Storage::disk('public')->delete('uploads/products/images/' . $product->image);
+                }
+    
+                // Update the logo field with the new filename
+            
+            }
+            $product->image = $filename;
+            $product->save();
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
     public function create_post(Request $request)
     {
         $validatedData = $request->validate([
@@ -45,7 +74,10 @@ class ProductController extends Controller
             'category_id' => 'bail|required',
             'unit_id' => 'bail|required',
             'price' => 'bail|required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure the file is an image
         ]);
+
+        
 
         $product = Product::create([
             // 'code' =>$request->code,
@@ -54,6 +86,8 @@ class ProductController extends Controller
             'description' =>$request->description,
             'stock' =>0
         ]);
+
+        $this->handle_upload($request,$product);
 
         
 
@@ -103,6 +137,7 @@ class ProductController extends Controller
             ],
             'name' => 'bail|required',
             'category_id' => 'bail|required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure the file is an image
         ]);
 
         $product = Product::find($request->id);
@@ -111,6 +146,8 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->description = $request->description;
         $product->save();
+
+        $this->handle_upload($request,$product);
 
         Alert::success('Well done!', 'Product  Updated!');
 
