@@ -25,6 +25,15 @@ class TransactionController extends Controller
         return $dataTable->render('transaction.index');
     }
 
+    public function find_product(Request $request){
+        $data = "OKE";
+        return response()->json([
+            'success' => true,
+            'message' => 'Product Found!',
+            'data' => $data
+        ], 201);
+    }
+
 
     public function store(Request $request){
         $validatedData = $request->validate([

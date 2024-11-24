@@ -48,7 +48,7 @@
                     $('#product_id').select2({
                         theme: "classic",
                         ajax: {
-                            url: '/stok/search', // URL to fetch data
+                            url: '/produk/search', // URL to fetch data
                             dataType: 'json',
                             delay: 250,
                             processResults: function (data) {

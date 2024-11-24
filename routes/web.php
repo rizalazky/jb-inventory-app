@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/edit/{id}', [ProductController::class, 'edit_post'])->name('product.edit_post');
         Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+        Route::get('/search', [ProductController::class, 'search'])->name('product.search');
     });
 
     // product price
@@ -145,7 +146,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/out', [StockController::class, 'out'])->name('stock.out');
         Route::get('/edit/{id}', [StockController::class, 'edit'])->name('stock.edit');
         Route::put('/edit/{id}', [StockController::class, 'editput'])->name('stock.editput');
-        Route::get('/search', [StockController::class, 'search'])->name('stock.search');
         Route::get('/history', [StockController::class, 'history'])->name('stock.index');
         Route::delete('/delete/{id}', [StockController::class, 'delete'])->name('stock.delete');
     });
@@ -159,6 +159,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/history', [TransactionController::class, 'history'])->name('transaction.index');
         Route::delete('/delete/{id}', [TransactionController::class, 'delete'])->name('transaction.delete');
         Route::get('/pdf/preview/{id}', [PdfController::class, 'previewPdf']);
+        Route::post('/findproduct', [TransactionController::class, 'find_product'])->name('transaction.find_product');
     });
     
 

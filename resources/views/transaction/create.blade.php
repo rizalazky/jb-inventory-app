@@ -48,18 +48,26 @@
                             PRODUK
                         </div>
                         <div class="card-body">
-                             
-                            <div class="input-group mb-3" style="width:20%;">
-                                <!-- <input type="text" class="form-control" id="product_id" placeholder="Masukan Kode Produk" disabled aria-describedby="button-addon2"> -->
-                                 <select id="product_id" name="product_id" class="form-control">
-
-                                </select>
+                            
+                            <div class="mb-3 col-md-4" style="">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="barcode-input">SCAN BARCODE</label>
+                                        <input type="text" name="barcode-input" placeholder="Scan Barcode" id="barcode-input" class="form-control">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="product_id">CARI PRODUK</label>
+                                        <select id="product_id" name="product_id" class="form-control">
+        
+                                        </select>
+                                    </div>
+                                </div>
                                 <!-- <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" id="button-addon2">CARI</button>
                                 </div> -->
                             </div>
                             
-                            <table class="table table-bordered" id="MyTable">
+                            <table class="table table-bordered table-responsive" style="" id="MyTable">
                                 <thead>
                                     <th>KODE</th>
                                     <th>PRODUK</th>
@@ -84,6 +92,7 @@
                                     <th>QTY</th>
                                     <th>SUB TOTAL</th>
                                     <th>DISKON</th>
+                                    <th>TOTAL</th>
                                     <th></th>
                                 </tfoot>
                             </table>
@@ -291,10 +300,59 @@
                         }
                     })
 
+                    async function findProduct(barcode){
+                        return new Promise((resolve, reject) => {
+                            $.ajax({
+                                url: `/produk/search?term=${barcode}`,
+                                type: 'GET',
+                                success: function (response) {
+                                    resolve(response); // Resolve the promise with the response
+                                },
+                                error: function (err) {
+                                    console.error('An error occurred:', err);
+                                    reject(err); // Reject the promise if an error occurs
+                                }
+                            });
+                        });
+                    }
+                    $('#barcode-input').on('input', async function () {
+                        const barcode = $(this).val().trim();
+
+                        if (barcode.length > 0) {
+                            let products= await findProduct(barcode);
+                            console.log('products', products)
+                            pushProductList(products[0])
+                        }
+
+                        $('#barcode-input').val('');
+                    });
+
+                    function pushProductList(product){
+                         // let productprices = data.productprices;
+                         let checkIfExist = productList.find(list =>{return list.code == product.code});
+                        if(checkIfExist){
+                            alert('Item sudah ditambahkan');
+                            return false;
+                        }
+                        if(product.stock == 0){
+                            alert('Stok Kosong');
+                            return false;
+                        }
+                        productList.push(product)
+                        generateTable()
+                    }
+
+                    $('#product_id').on('select2:select', function (e) {
+                        var data = e.params.data;
+                        pushProductList(data.item)
+                       
+                        $("#product_id").empty().trigger('change')
+                    });
+
                     $('#product_id').select2({
                         theme: "bootstrap4",
                         ajax: {
-                            url: '/stok/search', // URL to fetch data
+                            url: '/produk/search', // URL to fetch data
                             dataType: 'json',
                             delay: 250,
                             processResults: function (data) {
@@ -381,18 +439,7 @@
                         $(this).closest("tr").remove();
                     });
 
-                    $('#product_id').on('select2:select', function (e) {
-                        var data = e.params.data;
-                       
-                        // let productprices = data.productprices;
-                        let checkIfExist = productList.find(list =>{return list.code == data.item.code});
-                        if(checkIfExist){
-                            alert('Item sudah ditambahkan');
-                            return false;
-                        }
-                        productList.push(data.item)
-                        generateTable()
-                    });
+                    
 
                     async function saveTransaction(data){
                         // let url = 'http://localhost:8000/transaksi/save';

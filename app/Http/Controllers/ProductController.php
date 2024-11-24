@@ -27,6 +27,18 @@ class ProductController extends Controller
         return $dataTable->render('product.index');
     }
 
+    public function search(Request $request)
+    {
+        $term = $request->input('term');
+
+        $results = Product::with('productprices.productunit')
+                    ->where('name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('code','LIKE','%'.$term.'%')
+                    ->get();
+
+        return response()->json($results);
+    }
+
     public function create()
     {
         $categories = ProductCategory::all();

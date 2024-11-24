@@ -295,7 +295,7 @@
                     $('#product_id').select2({
                         theme: "bootstrap4",
                         ajax: {
-                            url: '/stok/search', // URL to fetch data
+                            url: '/produk/search', // URL to fetch data
                             dataType: 'json',
                             delay: 250,
                             processResults: function (data) {
