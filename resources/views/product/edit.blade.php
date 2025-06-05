@@ -48,20 +48,20 @@
                                     <select name="" id="unit-default" class="form-control">
                                         @foreach ($product->productprices as $dt)
                                             @if($dt->is_default)
-                                                <option class="option-unit" data-stock="{{ $product->stock }}" data-price="{{ number_format($dt->price) }}" value="{{ $dt->id }}" selected>{{ $dt->productunit->name }}</option>
+                                                <option class="option-unit" data-stock="{{ $product->stock }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}" selected>{{ $dt->productunit->name }}</option>
                                             @else
-                                                <option class="option-unit" data-stock="{{ $dt->convert_stock($dt->id,$product->stock) }}" data-price="{{ number_format($dt->price) }}" value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
+                                                <option class="option-unit" data-stock="{{ number_format($dt->unit_conversion_value * $product->stock) }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Harga Beli</label>
-                                    <input type="text" class="form-control" disabled id="buy-price-default" value="{{ number_format($product->defaultProductPrice->buy_price, 0, ',', '.') }}">
+                                    <input type="text" class="form-control" disabled id="buy-price-default" value="{{ number_format($product->defaultProductPrice->buy_price) }}">
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Harga Jual</label>
-                                    <input type="text" class="form-control" disabled id="sell-price-default" value="{{ number_format($product->defaultProductPrice->sell_price, 0, ',', '.') }}">
+                                    <input type="text" class="form-control" disabled id="sell-price-default" value="{{ number_format($product->defaultProductPrice->sell_price) }}">
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Stok</label>
@@ -111,9 +111,11 @@
     <script>
         $(document).ready(function(){
             const onDefaultUnitChange = () =>{
-                let price = $('#unit-default').find(':selected').data('price');
+                let buyPrice = $('#unit-default').find(':selected').data('buyprice');
+                let sellPrice = $('#unit-default').find(':selected').data('sellprice');
                 let stock = $('#unit-default').find(':selected').data('stock');
-                $('#price-default').val(price);
+                $('#buy-price-default').val(buyPrice);
+                $('#sell-price-default').val(sellPrice);
                 $('#stock').val(stock);
             }
 

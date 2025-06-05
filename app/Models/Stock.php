@@ -16,6 +16,7 @@ class Stock extends Model
         "transaction_id",
         "transaction_detail_id",
         "quantity",
+        "base_quantity",
         "notes",
         "user_by"
     ];
@@ -33,7 +34,7 @@ class Stock extends Model
     {
         static::created(function (Stock $stock) {
             $product = $stock->product;
-            $quantity = $stock->get_quantity($stock);
+            $quantity = $stock->base_quantity;
             if ($stock->type == 'in') {
                 $product->stock += $quantity;
             } else {
@@ -47,10 +48,10 @@ class Stock extends Model
              $originalStock = new Stock($stock->getOriginal());
 
             // Get the original quantity using the get_quantity method
-            $originalQuantity = $originalStock->get_quantity($originalStock);
+            $originalQuantity = $originalStock->base_quantity;
 
             $product = $stock->product;
-            $newQuantity = $stock->get_quantity($stock);
+            $newQuantity = $stock->base_quantity;
 
             // Revert the original stock change
             if ($stock->type == 'in') {
@@ -66,7 +67,7 @@ class Stock extends Model
 
         static::deleted(function (Stock $stock) {
             $product = $stock->product;
-            $quantity = $stock->get_quantity($stock);
+            $quantity = $stock->base_quantity;
             if ($stock->type == 'in') {
                 $product->stock -= $quantity;
             } else {
