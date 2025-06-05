@@ -24,12 +24,16 @@ class TransactionDetail extends Model
     {
         static::created(function ($transactionDetail) {
             $transaction = $transactionDetail->transaction;
+            $product_price = $transactionDetail->productprice;
+            $unit_conversion_value = $product_price->unit_conversion_value;
+            $base_quantity = $transactionDetail->qty / $unit_conversion_value;
             $stock = new Stock([
                 'transaction_id' => $transactionDetail->transaction_id,
                 'transaction_detail_id' => $transactionDetail->id,
                 'type' => $transaction->type,
                 'product_id' => $transactionDetail->product_id,
                 'quantity' => $transactionDetail->qty,
+                'base_quantity' => $base_quantity,
                 'product_price_id' => $transactionDetail->product_price_id,
                 'notes' => $transaction->type == "in" ? "Transaksi Pembelian" : "Transaksi Penjulan",
                 'user_by' => $transaction->user_by,

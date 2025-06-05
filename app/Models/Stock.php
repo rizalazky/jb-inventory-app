@@ -67,7 +67,7 @@ class Stock extends Model
 
         static::deleted(function (Stock $stock) {
             $product = $stock->product;
-            $quantity = $stock->get_quantity($stock);
+            $quantity = $stock->base_quantity;
             if ($stock->type == 'in') {
                 $product->stock -= $quantity;
             } else {

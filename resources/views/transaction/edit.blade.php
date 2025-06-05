@@ -64,11 +64,14 @@
                             
                             <table class="table table-bordered" id="MyTable">
                                 <thead>
+                                    <thead>
                                     <th>KODE</th>
                                     <th>PRODUK</th>
                                     <th>SATUAN</th>
-                                    <th>HARGA</th>
                                     <th>QTY</th>
+                                    <th>UNIT CONVERSION VALUE</th>
+                                    <th>BASE QTY</th>
+                                    <th>HARGA</th>
                                     <th>SUB TOTAL</th>
                                     <th>DISKON</th>
                                     <th>TOTAL</th>
@@ -83,10 +86,13 @@
                                     <th>KODE</th>
                                     <th>PRODUK</th>
                                     <th>SATUAN</th>
-                                    <th>HARGA</th>
                                     <th>QTY</th>
+                                    <th>UNIT CONVERSION VALUE</th>
+                                    <th>BASE QTY</th>
+                                    <th>HARGA</th>
                                     <th>SUB TOTAL</th>
                                     <th>DISKON</th>
+                                    <th>TOTAL</th>
                                     <th></th>
                                 </tfoot>
                             </table>
@@ -181,6 +187,7 @@
                     const generateTable = ()=>{
                         console.log(productList)
                         // return false;
+                        let type = $('#type').val();
                         let html = ``;
                         // let total = 0;
                         // let subTotalEl;
@@ -189,15 +196,18 @@
                             let optionsHTML = ``
                             let priceDefault;
                             let productPriceDefault;
+                            let unitConversionValue;
+                            let baseQty;
 
                             console.log('product',product)
                             product?.product?.productprices?.map(price=>{
                                 
                                     if(price.id == product.product_price_id){
-                                        priceDefault = price.price;
+                                        priceDefault = type == 'out' ? price.sell_price : price.buy_price;
                                         productPriceDefault = price.id;
+                                        unitConversionValue = price.unit_conversion_value;
                                     }
-                                    let option = `<option data-price="${price.price}" value='${price.id}' ${price.id == product.product_price_id  && 'selected'}>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
+                                    let option = `<option data-price="${price.sell_price}" data-ucv="${price.unit_conversion_value}" value='${price.id}' ${price.id == product.product_price_id  && 'selected'}>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
                                     optionsHTML = optionsHTML + option;
 
                                 
@@ -212,10 +222,16 @@
                                     <select class="form-control product-select-price" id="product-price-id-${product.product.code}" data-code="${product.product.code}"> ${optionsHTML}</select>
                                 </td>
                                 <td>
-                                    <input type='number' value="${priceDefault}" class="form-control product-price" disabled id="product-price-${product.product.code}"/>
+                                    <input type='number' value="${product.qty}" class="form-control product-qty" id="product-qty-${product.product.code}" data-code="${product.product.code}"/>
                                 </td>
                                 <td>
-                                    <input type='number' value="${product.qty}" class="form-control product-qty" id="product-qty-${product.product.code}" data-code="${product.product.code}"/>
+                                    <input type='number' value="${unitConversionValue}" class="form-control product-qty" readonly id="product-unit-conversion-value-${product.product.code}" data-code="${product.product.code}"/>
+                                </td>
+                                <td>
+                                    <input type='number' value="${product.qty / unitConversionValue}" class="form-control product-base-qty" readonly id="product-base-qty-${product.product.code}" data-code="${product.product.code}"/>
+                                </td>
+                                <td>
+                                    <input type='number' value="${priceDefault}" class="form-control product-price" disabled id="product-price-${product.product.code}"/>
                                 </td>
                                 <td>
                                     <input type='number' value="${ subTotal || 0 }" disabled class="form-control" id="product-sub-total-${product.product.code}"/>
@@ -245,6 +261,7 @@
                     function changeProductSubTotal(code){
                         
                         const qty = document.getElementById('product-qty-'+code)
+                        const baseQty = document.getElementById('product-base-qty-'+code)
                         const price = document.getElementById('product-price-'+code)
                         const discount = document.getElementById('product-discount-'+code)
                         const productPriceSelectOption = document.getElementById('product-price-id-'+code);
@@ -257,6 +274,7 @@
                         let productListSelectedIndex = productList.findIndex((product)=>{return product.product.code === code})
 
                         productList[productListSelectedIndex].qty = qty.value;
+                        productList[productListSelectedIndex].base_qty = baseQty.value;
                         productList[productListSelectedIndex].price = price.value;
                         productList[productListSelectedIndex].subTotal = subTotal;
                         productList[productListSelectedIndex].total = total;
@@ -278,13 +296,32 @@
                         const productCode = target.dataset.code;
                         if(target.classList.contains('product-select-price')){
                             const priceInput = document.getElementById("product-price-"+productCode);
-                            // console.log(priceInput);
+                            const unitConversionValueInput = document.getElementById("product-unit-conversion-value-"+productCode);
+                            const baseQuantityInput = document.getElementById("product-base-qty-"+productCode);
+
+                            const quantityInput = document.getElementById("product-qty-"+productCode);
+                            let quantity = quantityInput.value;
                             const price = target.options[target.selectedIndex].dataset.price;
-                            priceInput.value = price
+                            const unitConversionValue = target.options[target.selectedIndex].dataset.ucv;
+
+                            let baseQuantity = Number(quantity) / Number(unitConversionValue);
+                            priceInput.value = price;
+                            unitConversionValueInput.value = unitConversionValue;
+                            baseQuantityInput.value = baseQuantity;
 
                             changeProductSubTotal(productCode)
                         }
                         if(target.classList.contains('product-qty')){
+                            const unitConversionValueInput = document.getElementById("product-unit-conversion-value-"+productCode);
+                            const quantityInput = document.getElementById("product-qty-"+productCode);
+                            const baseQuantityInput = document.getElementById("product-base-qty-"+productCode);
+                            let quantity = quantityInput.value;
+                            let unitConversionValue = unitConversionValueInput.value;
+
+                            let baseQuantity = Number(quantity) / Number(unitConversionValue);
+
+                            baseQuantityInput.value = baseQuantity;
+
                             changeProductSubTotal(productCode)
                         }
                         if(target.classList.contains('product-discount')){
