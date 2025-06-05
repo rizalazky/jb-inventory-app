@@ -18,17 +18,21 @@ class ProductPriceController extends Controller
         $validatedData = $request->validate([
             'product_id' => 'required',
             'unit_id' => 'required',
-            'price' => 'required',
+            'buy_price' => 'required',
+            'sell_price' => 'required',
+            'unit_conversion_value' => 'required',
         ]);
 
         $product = ProductPrice::create([
             'product_id' =>$request->product_id,
             'unit_id' =>$request->unit_id,
-            'price' =>$request->price
+            'buy_price' =>$request->buy_price,
+            'sell_price' =>$request->sell_price,
+            'unit_conversion_value' =>$request->unit_conversion_value,
         ]);
 
     
-        Alert::success('Sipp!', 'Harga Produk berhasil ditambahkan!');
+        Alert::success('Sipp!', 'Product Price Added!');
         return redirect()->route('product.edit',['id' => $request->product_id]);
     }
 
@@ -38,16 +42,22 @@ class ProductPriceController extends Controller
         $validatedData = $request->validate([
             'product_id' => 'required',
             'unit_id' => 'required',
-            'price' => 'required',
+            'buy_price' => 'required',
+            'sell_price' => 'required',
+            'unit_conversion_value' => 'required',
         ]);
 
         $product = ProductPrice::find($request->id);
         $product->product_id = $request->product_id;
         $product->unit_id = $request->unit_id;
-        $product->price = $request->price;
+        $product->buy_price = $request->buy_price;
+        $product->sell_price = $request->sell_price;
+        
+            $product->unit_conversion_value = $request->unit_conversion_value;
+        
         $product->save();
 
-        Alert::success('OKE!', 'Berhasil update harga produk!');
+        Alert::success('OKE!', 'Product Price Updated!');
 
         return redirect()->route('product.edit',['id' => $request->product_id]);
     }
@@ -59,7 +69,7 @@ class ProductPriceController extends Controller
         $product_price->is_default = !$product_price->is_default;
         $product_price->save();
 
-        Alert::success('Well done!', 'Berhasil atur harga default!');
+        Alert::success('Well done!', 'Default Product Price!');
 
         return redirect()->route('product.edit',['id' => $request->product_id]);
     }
@@ -69,7 +79,7 @@ class ProductPriceController extends Controller
         $product_price = ProductPrice::find($id);
         $product_id = $product_price->product->id;
         $product_price->delete();
-        Alert::success('Oke!', 'Berhasil menghapus harga produk!');
+        Alert::success('Oke!', 'Product Price Deleted!');
 
         return redirect()->route('product.edit',['id' => $product_id]);
     }

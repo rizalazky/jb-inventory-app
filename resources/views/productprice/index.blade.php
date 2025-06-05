@@ -10,8 +10,10 @@
             <thead>
                 <th>NO</th>
                 <th>UNIT</th>
-                <th>PRICE</th>
+                <th>BUY PRICE</th>
+                <th>SELL PRICE</th>
                 <th>STOK</th>
+                <th>UNIT CONVERSION VALUE</th>
                 <th class="text-center">DEFAULT</th>
                 <th>ACTION</th>
             </thead>
@@ -20,8 +22,10 @@
                     <tr>
                         <td>{{ $price->id }}</td>
                         <td>{{ $price->productunit->name }}</td>
-                        <td>{{ number_format($price->price) }}</td>
-                        <td>{{ $price->is_default ? $product_stock : $price->convert_stock($price->id,$product_stock) }}</td>
+                        <td class="text-right">{{ number_format($price->buy_price) }}</td>
+                        <td class="text-right">{{ number_format($price->sell_price) }}</td>
+                        <td>{{ $price->is_default ? $product_stock : $product_stock * $price->unit_conversion_value }}</td>
+                        <td>{{ $price->unit_conversion_value ? $price->unit_conversion_value : 1 }}</td>
                         <td class="d-flex justify-center">
                             <form action="/harga-produk/set-default" method="post">
                                 @csrf
@@ -35,16 +39,19 @@
                                 class="btn btn-sm btn-info btn-product-price-update"
                                 data-id="{{ $price->id }}"
                                 data-unitid="{{ $price->unit_id }}"
-                                data-price="{{ $price->price }}"
+                                data-buyprice="{{ $price->buy_price }}"
+                                data-sellprice="{{ $price->sell_price }}"
+                                data-ucv="{{ $price->unit_coversion_value || 1 }}"
+                                data-isdefault="{{ $price->is_default}}"
                                 data-bs-toggle="modal" data-bs-target="#modal-product-price"
                                 >
                                 Edit
                             </button>
-                            @if(!$price->is_default)
+                            <!-- @if(!$price->is_default)
                                 <button type="button" class="btn btn-primary btn-sm btn-add-modal-konversi" data-bs-toggle="modal" data-bs-target="#modal-konversi">
                                     Atur Konversi Stok
                                 </button>
-                            @endif
+                            @endif -->
                             <a href="/harga-produk/delete/{{ $price->id }}" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
@@ -77,9 +84,19 @@
                     @error('unit_id') <p class="text-danger">{{ $message }}</p> @enderror
                 </div>  
                 <div class="mb-3">
-                    <label for="price" class="form-label">Harga</label>
-                    <input type="number" class="form-control" id="price" name="price">
-                    @error('price') <p class="text-danger">{{ $message }}</p> @enderror
+                    <label for="buy_price" class="form-label">Harga Beli</label>
+                    <input type="number" class="form-control" id="buy_price" name="buy_price">
+                    @error('buy_price') <p class="text-danger">{{ $message }}</p> @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="sell_price" class="form-label">Harga Jual</label>
+                    <input type="number" class="form-control" id="sell_price" name="sell_price">
+                    @error('sell_price') <p class="text-danger">{{ $message }}</p> @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="unit_conversion_value" class="form-label">Unit Conversion Value</label>
+                    <input type="number" class="form-control" id="unit_conversion_value" name="unit_conversion_value" step="any">
+                    @error('unit_conversion_value') <p class="text-danger">{{ $message }}</p> @enderror
                 </div>
             </div>
             <div class="modal-footer">
@@ -100,14 +117,33 @@
                 @endif
 
                 $('.btn-product-price-update').click(function(){
-                    
+                    let isDefault = $(this).data('isdefault');
                     $('#product_price_id').val($(this).data('id'))
-                    $('#price').val($(this).data('price'))
+                    $('#buy_price').val($(this).data('buyprice'))
+                    $('#sell_price').val($(this).data('sellprice'))
                     $('#unit_id').val($(this).data('unitid'))
-                    $('#modal-product-price-title').text("Edit Harga Produk")
+                    $('#unit_conversion_value').val($(this).data('ucv'));
+
+                    $('#unit_conversion_value').prop('readonly', isDefault)
+                    $('#modal-product-price-title').text("Edit Product Price")
                     $('#product-price-form').attr('action','/harga-produk/update')
                 })
+
+                $('.btn-add-modal').click(function(){
+                     $('#product_price_id').val('')
+                    $('#buy_price').val('')
+                    $('#sell_price').val('')
+                    $('#unit_id').val('')
+                    $('#unit_conversion_value').val('');
+
+                    $('#unit_conversion_value').prop('disabled', false)
+                    $('#modal-product-price-title').text("Add Product Price")
+                    $('#product-price-form').attr('action','/harga-produk')
+                });
+
             });
         
     </script>
 @endpush
+
+

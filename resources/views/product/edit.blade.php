@@ -56,8 +56,12 @@
                                     </select>
                                 </div>
                                 <div class="mb-3 col-4">
-                                    <label for="name" class="form-label">Harga</label>
-                                    <input type="text" class="form-control" disabled id="price-default" value="{{ $product->stock }}">
+                                    <label for="name" class="form-label">Harga Beli</label>
+                                    <input type="text" class="form-control" disabled id="buy-price-default" value="{{ number_format($product->defaultProductPrice->buy_price, 0, ',', '.') }}">
+                                </div>
+                                <div class="mb-3 col-4">
+                                    <label for="name" class="form-label">Harga Jual</label>
+                                    <input type="text" class="form-control" disabled id="sell-price-default" value="{{ number_format($product->defaultProductPrice->sell_price, 0, ',', '.') }}">
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Stok</label>
@@ -92,13 +96,13 @@
                     'productprices' => $product->productprices,
                     'productunits' => $product_units,
                 ])
-                @if(count($product->productprices) > 1)
+                <!-- @if(count($product->productprices) > 1)
                     @include('conversionproductunit.index', [
                         'product_id'=>$product->id,
                         'productprices' => $product->productprices,
                         'unitconversions' => $product->unitconversions,
                     ])
-                @endif
+                @endif -->
             </div>
         </div>
     </div>
