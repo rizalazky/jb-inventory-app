@@ -34,10 +34,12 @@
                                     <option value="{{ $data->customer_id }}" selected>{{ $data->customer->name }}</option>
                                 @endif
                             </select> 
-                        @else
+                            @else
                             <label for="date">Supplier</label>
                             <select name="" class="form-control" id="supplier_id">
-                                <option value="{{ $data->supplier_id }}" selected>{{ $data->supplier->name }}</option>
+                                @if($data->customer)
+                                    <option value="{{ $data->supplier_id }}" selected>{{ $data->supplier->name }}</option>
+                                @endif
                             </select> 
                         @endif
                         </div>
