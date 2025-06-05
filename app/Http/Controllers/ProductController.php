@@ -85,7 +85,7 @@ class ProductController extends Controller
             'name' => 'bail|required',
             'category_id' => 'bail|required',
             'unit_id' => 'bail|required',
-            'price' => 'bail|required',
+            'sell_price' => 'bail|required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure the file is an image
         ]);
 
@@ -107,7 +107,9 @@ class ProductController extends Controller
         $productPrice = ProductPrice::create([
             'product_id' =>$product->id,
             'unit_id' =>$request->unit_id,
-            'price' =>$request->price,
+            'unit_conversion_value' =>1,
+            'buy_price' =>$request->buy_price,
+            'sell_price' =>$request->sell_price,
             'is_default'=>true
         ]);
 
@@ -127,9 +129,10 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::find($id);
+        $product = Product::with('defaultProductPrice')->find($id);
         $product_units = ProductUnit::all();
         $categories = ProductCategory::all();
+
         
         return view('product.edit', [
             'product' => $product,

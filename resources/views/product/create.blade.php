@@ -52,9 +52,14 @@
                             @error('unit_id') <p class="text-danger">{{ $message }}</p> @enderror
                         </div>
                         <div class="mb-3 col-6">
+                            <label for="name" class="form-label">Harga Beli</label>
+                            <input type="number" class="form-control" id="buy_price" name="buy_price">
+                            @error('buy_price') <p class="text-danger">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="mb-3 col-6">
                             <label for="name" class="form-label">Harga Jual</label>
-                            <input type="number" class="form-control" id="price" name="price">
-                            @error('price') <p class="text-danger">{{ $message }}</p> @enderror
+                            <input type="number" class="form-control" id="sell_price" name="sell_price">
+                            @error('sell_price') <p class="text-danger">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="mb-3">

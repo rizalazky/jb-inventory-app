@@ -57,6 +57,11 @@ class Product extends Model
 
     }
 
+    public function defaultProductPrice()
+    {
+        return $this->hasOne(ProductPrice::class)->where('is_default', true);
+    }
+
     public function productprices():HasMany
     {
         return $this->hasMany(ProductPrice::class);

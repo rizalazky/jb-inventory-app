@@ -13,7 +13,9 @@ class ProductPrice extends Model
     protected $fillable =[
         'product_id',
         'unit_id',
-        'price',
+        'buy_price',
+        'sell_price',
+        'unit_conversion_value',
         'is_default'
     ];
 
@@ -37,6 +39,7 @@ class ProductPrice extends Model
                 return $value * $conversion->value;
             }
         }
+        
 
         return null;
     }
