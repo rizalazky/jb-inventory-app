@@ -30,6 +30,14 @@
                         <input type="number" name="quantity" id="quantity" class="form-control">
                     </div>
                     <div class="mb-3">
+                        <label for="quantity" class="form-label">Unit Conversion Number</label>
+                        <input type="number" name="unit_conversion_value" id="unit_conversion_value" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Base Quantity</label>
+                        <input type="number" name="base_quantity" id="base_quantity" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
                         <label for="name" class="form-label">Catatan</label>
                        <textarea name="notes" id="notes" class="form-control"></textarea>
                     </div>
@@ -73,14 +81,37 @@
                     $('#product_id').on('select2:select', function (e) {
                         var data = e.params.data;
                         let productprices = data.productprices;
-                        let optionsHTML = ``;
+                        let optionsHTML = `<option>Select Unit</option>`;
                         productprices?.map(price=>{
-                            let option = `<option value='${price.id}' ${price.is_default && 'selected'}>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
+                            let option = `<option value='${price.id}' data-ucv='${price.unit_conversion_value || 1}'>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
                             optionsHTML = optionsHTML + option;
                         })
                         $('#product_price_id').html(optionsHTML)
                         console.log(data.productprices);
                     });
+
+                    $('#product_price_id').on('change', function(e){
+                        var selected = $('#product_price_id').find(":selected").data('ucv');
+
+                        $('#unit_conversion_value').val(selected);
+                        const quantity = $('#quantity').val() || 1;
+                        console.log('Quantity', quantity);
+
+                        let baseQuantity = Number(quantity) / Number(selected); 
+
+                        $('#base_quantity').val(baseQuantity);
+                    })
+
+                    $('#quantity').on('change', function(e){
+                        var selected =$('#unit_conversion_value').val();
+                        const quantity = $('#quantity').val() || 1;
+                        console.log('Quantity', quantity);
+                        console.log('Selected', selected);
+
+                        let baseQuantity = Number(quantity) / Number(selected); 
+
+                        $('#base_quantity').val(baseQuantity);
+                    })
                 });
         </script>
     @endpush

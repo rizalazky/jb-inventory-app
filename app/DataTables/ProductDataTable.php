@@ -27,6 +27,9 @@ class ProductDataTable extends DataTable
                 $imageUrl = asset('storage/uploads/products/images/' . $row->image); // Adjust path if necessary
                 return '<img src="' . $imageUrl . '" alt="' . $row->name . '" width="50" height="50">';
             })
+            ->addColumn('unit_name', function ($row) {
+                return $row->defaultProductPrice->productunit->name ? $row->defaultProductPrice->productunit->name : '-';
+            })
             ->addColumn('action', 'product.datatables.action')
             ->order(function ($query) {
                 if (request()->has('id')) {
@@ -42,7 +45,7 @@ class ProductDataTable extends DataTable
      */
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('defaultProductPrice');
     }
 
     /**
@@ -83,6 +86,7 @@ class ProductDataTable extends DataTable
             Column::make('name'),
             Column::make('description'),
             Column::make('stock'),
+            Column::make('unit_name')->title('Unit'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

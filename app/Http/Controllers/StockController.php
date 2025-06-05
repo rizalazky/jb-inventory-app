@@ -37,11 +37,12 @@ class StockController extends Controller
             'product_id' => $request->product_id,
             'product_price_id' => $request->product_price_id,
             'quantity' => $request->quantity,
+            'base_quantity' => $request->base_quantity,
             'notes' => $request->notes,
             'user_by' => Auth::id(),
         ]);
 
-        Alert::success('Nice!', 'Product  Added!');
+        Alert::success('Nice!', 'Stock  Added!');
         return redirect()->route('product.index');
 
         
@@ -66,6 +67,7 @@ class StockController extends Controller
         $data = Stock::find($request->id);
         $data->product_price_id = $request->product_price_id;
         $data->quantity = $request->quantity;
+        $data->base_quantity = $request->base_quantity;
         $data->notes = $request->notes;
         $data->save();
 

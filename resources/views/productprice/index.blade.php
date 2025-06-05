@@ -12,20 +12,20 @@
                 <th>UNIT</th>
                 <th>BUY PRICE</th>
                 <th>SELL PRICE</th>
-                <th>STOK</th>
                 <th>UNIT CONVERSION VALUE</th>
+                <th>STOK</th>
                 <th class="text-center">DEFAULT</th>
                 <th>ACTION</th>
             </thead>
             <tbody>
                 @foreach($productprices as $price)
                     <tr>
-                        <td>{{ $price->id }}</td>
+                        <td>{{  $loop->iteration }}</td>
                         <td>{{ $price->productunit->name }}</td>
                         <td class="text-right">{{ number_format($price->buy_price) }}</td>
                         <td class="text-right">{{ number_format($price->sell_price) }}</td>
-                        <td>{{ $price->is_default ? $product_stock : $product_stock * $price->unit_conversion_value }}</td>
-                        <td>{{ $price->unit_conversion_value ? $price->unit_conversion_value : 1 }}</td>
+                        <td>{{ $price->unit_conversion_value ? $price->unit_conversion_value : 1 }} {{ $price->productunit->name }}</td>
+                        <td>{{ $price->is_default ? number_format($product_stock) : number_format($product_stock * $price->unit_conversion_value) }} {{ $price->productunit->name }}</td>
                         <td class="d-flex justify-center">
                             <form action="/harga-produk/set-default" method="post">
                                 @csrf
