@@ -9,7 +9,7 @@
             @csrf
             <div class="card">
                 <div class="card-header">
-                {{ __('STOK MASUK FORM') }}
+                {{ __('STOK FORM') }}
                 </div>
                 <div class="card-body">
                     <input type="hidden" name="type" value="{{ $data->type }}">
@@ -20,9 +20,15 @@
                             <option value="{{ $data->product_id }}" selected="selected">{{ $data->product->name }}</option>
                         </select>
                     </div>
+                    @if($data->transaction_id)
+                        <div class="mb-3">
+                            <label for="transaction_id" class="form-label">Link Transaksi</label>
+                            <a class='form-control' target='_blank' href="/transaksi/edit/{{ $data->transaction_id}}">{{ $data->transaction->transaction_number }}</a>
+                        </div>
+                    @endif
                     <div class="mb-3">
                         <label for="product_price_id" class="form-label">Satuan</label>
-                        <select id="product_price_id" name="product_price_id" class="form-control">
+                        <select id="product_price_id" name="product_price_id" class="form-control" @disabled($data->transaction_id !== null)>
                             @foreach($data->product->productprices as $proprice)
                                 <option value="{{ $proprice->id }}" data-ucv="{{ $proprice->unit_conversion_value ? $proprice->unit_conversion_value : 1 }}" @selected($data->product_price_id == $proprice->id) >{{ $proprice->productunit->name }} {{ $proprice->is_default ? ' - DEFAULT' : '' }}</option>
                             @endforeach
@@ -31,7 +37,7 @@
 
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" name="quantity" id="quantity" value="{{ $data->quantity }}" class="form-control">
+                        <input type="number" name="quantity" id="quantity" value="{{ $data->quantity }}" @disabled($data->transaction_id !== null) class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Unit Conversion Number</label>
@@ -43,11 +49,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Catatan</label>
-                       <textarea name="notes" id="notes" class="form-control">{{ $data->notes }}</textarea>
+                       <textarea name="notes" id="notes" class="form-control" @disabled($data->transaction_id !== null)>{{ $data->notes }}</textarea>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    @if(!$data->transaction_id)
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    @endif
                 </div>
             </div>
         </form>
