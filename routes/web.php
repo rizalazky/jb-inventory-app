@@ -14,6 +14,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductUnitConversionController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\DashboardController;
@@ -161,6 +162,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{id}', [TransactionController::class, 'delete'])->name('transaction.delete');
         Route::get('/pdf/preview/{id}', [PdfController::class, 'previewPdf']);
         Route::post('/findproduct', [TransactionController::class, 'find_product'])->name('transaction.find_product');
+    });
+
+    Route::middleware('role_or_permission:lihat laporan')->prefix('laporan')->group(function () {
+        Route::get('/penjualan', [ReportController::class, 'penjualan'])->name('laporan.penjualan');
+        Route::post('/transaksi/pdf', [ReportController::class, 'generate_pdf'])->name('report.generatepdf');
+        Route::get('/pembelian', [ReportController::class, 'pembelian'])->name('laporan.pembelian');
+        // Route::get('/stok', [ReportController::class, 'stok'])->name('laporan.stok');
     });
     
 

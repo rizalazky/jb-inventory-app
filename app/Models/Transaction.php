@@ -25,6 +25,10 @@ class Transaction extends Model
         'user_by',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public static function generateTransactionNo()
     {
         // Generate the date part

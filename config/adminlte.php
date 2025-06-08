@@ -324,7 +324,7 @@ return [
         // ],
         ['header' => 'MENU'],
         [
-            'text' => 'Dashboard',
+            'text' => 'DASHBOARD',
             'url' => '/',
             'icon' => 'fas fa-fw fa-home',
         ],
@@ -438,12 +438,29 @@ return [
                 ],
             ]
         ],
-        // [
-        //     'text' => 'LAPORAN',
-        //     'icon' => 'fas fa-fw fa-table',
-        //     'url' => '#',
-        //     'can' => 'lihat laporan',
-        // ],
+        [
+            'text' => 'LAPORAN',
+            'icon' => 'fas fa-fw fa-table',
+            'url' => '#',
+            'can' => 'lihat laporan',
+            'submenu' => [
+                [
+                    'text' => 'LAPORAN PENJUALAN',
+                    'url' => '/laporan/penjualan',
+                    'can' => 'lihat laporan penjualan',
+                ],
+                [
+                    'text' => 'LAPORAN PEMBELIAN',
+                    'url' => '/laporan/pembelian',
+                    'can' => 'lihat laporan pembelian',
+                ],
+                [
+                    'text' => 'LAPORAN STOK',
+                    'url' => '/laporan/stok',
+                    'can' => 'lihat laporan stok',
+                ],
+            ]
+        ],
         ['header' => 'OTHER'],
         [
             'text' => 'SETTING',
