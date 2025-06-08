@@ -28,7 +28,10 @@ class ProductDataTable extends DataTable
                 return '<img src="' . $imageUrl . '" alt="' . $row->name . '" width="50" height="50">';
             })
             ->addColumn('unit_name', function ($row) {
-                return $row->defaultProductPrice->productunit->name ? $row->defaultProductPrice->productunit->name : '-';
+                return $row->defaultDisplayProductPrice->productunit->name ? $row->defaultDisplayProductPrice->productunit->name : '-';
+            })
+            ->addColumn('stock', function ($row) {
+                return $row->defaultDisplayProductPrice->unit_conversion_value ? $row->defaultDisplayProductPrice->unit_conversion_value * $row->stock : $row->stock;  
             })
             ->addColumn('action', 'product.datatables.action')
             ->order(function ($query) {
@@ -45,7 +48,7 @@ class ProductDataTable extends DataTable
      */
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery()->with('defaultProductPrice');
+        return $model->newQuery()->with('defaultDisplayProductPrice');
     }
 
     /**

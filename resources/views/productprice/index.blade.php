@@ -14,7 +14,7 @@
                 <th>SELL PRICE</th>
                 <th>UNIT CONVERSION VALUE</th>
                 <th>STOK</th>
-                <th class="text-center">DEFAULT</th>
+                <th class="text-center">DEFAULT DISPLAY</th>
                 <th>ACTION</th>
             </thead>
             <tbody>
@@ -25,13 +25,13 @@
                         <td class="text-right">{{ number_format($price->buy_price) }}</td>
                         <td class="text-right">{{ number_format($price->sell_price) }}</td>
                         <td>{{ $price->unit_conversion_value ? $price->unit_conversion_value : 1 }} {{ $price->productunit->name }}</td>
-                        <td>{{ $price->is_default ? number_format($product_stock) : number_format($product_stock * $price->unit_conversion_value) }} {{ $price->productunit->name }}</td>
+                        <td>{{ $price->unit_conversion_value ? number_format($product_stock * $price->unit_conversion_value) : number_format($product_stock * 1) }} {{ $price->productunit->name }}</td>
                         <td class="d-flex justify-center">
-                            <form action="/harga-produk/set-default" method="post">
+                            <form action="/harga-produk/set-default-display" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $price->id }}">
                                 <input type="hidden" name="product_id" value="{{ $price->product_id }}">
-                                <input class="form-check-input" onChange="this.form.submit()" type="checkbox" id="flexCheckChecked" @if($price->is_default) checked @endif>
+                                <input class="form-check-input" onChange="this.form.submit()" type="checkbox" id="flexCheckChecked" @if($price->is_default_display) checked @endif>
                             </form>
                         </td>
                         <td>
@@ -41,7 +41,7 @@
                                 data-unitid="{{ $price->unit_id }}"
                                 data-buyprice="{{ $price->buy_price }}"
                                 data-sellprice="{{ $price->sell_price }}"
-                                data-ucv="{{ $price->unit_coversion_value || 1 }}"
+                                data-ucv="{{ $price->unit_conversion_value ? $price->unit_conversion_value : 1 }}"
                                 data-isdefault="{{ $price->is_default}}"
                                 data-bs-toggle="modal" data-bs-target="#modal-product-price"
                                 >

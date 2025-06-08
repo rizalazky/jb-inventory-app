@@ -125,6 +125,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ProductPriceController::class, 'index'])->name('productprice.index');
         Route::post('/', [ProductPriceController::class, 'create_post'])->name('productprice.create_post');
         Route::post('/set-default', [ProductPriceController::class, 'set_default_price'])->name('productprice.set_default_price');
+        Route::post('/set-default-display', [ProductPriceController::class, 'set_default_price_diplay'])->name('productprice.set_default_price_display');
         Route::post('/update', [ProductPriceController::class, 'edit_post'])->name('productprice.edit_post');
         // Route::put('/{id}', [ProductPriceController::class, 'edit_post'])->name('productprice.edit_post');
         Route::get('/delete/{id}', [ProductPriceController::class, 'delete'])->name('productprice.delete');

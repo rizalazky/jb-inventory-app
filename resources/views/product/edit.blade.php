@@ -47,7 +47,7 @@
                                     <label for="name" class="form-label">Satuan</label>
                                     <select name="" id="unit-default" class="form-control">
                                         @foreach ($product->productprices as $dt)
-                                            @if($dt->is_default)
+                                            @if($dt->is_default_display)
                                                 <option class="option-unit" data-stock="{{ $product->stock }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}" selected>{{ $dt->productunit->name }}</option>
                                             @else
                                                 <option class="option-unit" data-stock="{{ number_format($dt->unit_conversion_value * $product->stock) }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>

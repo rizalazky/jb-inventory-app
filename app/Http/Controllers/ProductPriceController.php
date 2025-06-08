@@ -74,6 +74,18 @@ class ProductPriceController extends Controller
         return redirect()->route('product.edit',['id' => $request->product_id]);
     }
 
+    public function set_default_price_diplay(Request $request){
+        $product_prices = ProductPrice::where('product_id', $request->product_id)->where('id','<>',$request->id)->update(['is_default_display' => false]);
+
+        $product_price = ProductPrice::find($request->id);
+        $product_price->is_default_display = !$product_price->is_default_display;
+        $product_price->save();
+
+        Alert::success('Well done!', 'Default Product Price!');
+
+        return redirect()->route('product.edit',['id' => $request->product_id]);
+    }
+
     public function delete($id){
         
         $product_price = ProductPrice::find($id);

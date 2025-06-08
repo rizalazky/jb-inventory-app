@@ -110,7 +110,8 @@ class ProductController extends Controller
             'unit_conversion_value' =>1,
             'buy_price' =>$request->buy_price,
             'sell_price' =>$request->sell_price,
-            'is_default'=>true
+            'is_default'=>true,
+            'is_default_display' => true,
         ]);
 
         // add initial stock
@@ -119,6 +120,7 @@ class ProductController extends Controller
             'product_id' => $product->id,
             'product_price_id' => $productPrice->id,
             'quantity' => $request->stock,
+            'base_quantity' => $request->stock,
             'notes' => "Initial Stock",
             'user_by' => Auth::id(),
         ]);
