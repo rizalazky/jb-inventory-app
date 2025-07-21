@@ -55,6 +55,7 @@ class Product extends Model
             $product->code = self::generateProductCode();
         });
 
+
     }
 
     public function defaultProductPrice()

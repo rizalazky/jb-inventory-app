@@ -4,8 +4,8 @@
     </x-slot>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
+        <div class="row flex gap-4">
+            <div class="flex-1">
                 <form method="POST" enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
@@ -45,7 +45,7 @@
                             <div class="row">
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Satuan</label>
-                                    <select name="" id="unit-default" class="form-control">
+                                    <select name="" id="unit-default" class="form-control" disabled>
                                         @foreach ($product->productprices as $dt)
                                             @if($dt->is_default_display)
                                                 <option class="option-unit" data-stock="{{ $product->stock }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}" selected>{{ $dt->productunit->name }}</option>
@@ -57,11 +57,11 @@
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Harga Beli</label>
-                                    <input type="text" class="form-control" disabled id="buy-price-default" value="{{ number_format($product->defaultProductPrice->buy_price) }}">
+                                    <input type="text" class="form-control" name="buy_price" id="buy-price-default" value="{{ number_format($product->defaultProductPrice->buy_price) }}">
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Harga Jual</label>
-                                    <input type="text" class="form-control" disabled id="sell-price-default" value="{{ number_format($product->defaultProductPrice->sell_price) }}">
+                                    <input type="text" class="form-control" name="sell_price" id="sell-price-default" value="{{ number_format($product->defaultProductPrice->sell_price) }}">
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Stok</label>
@@ -74,7 +74,7 @@
                                 @endif
                                 
                                 <label for="image" class="form-label">Gambar Produk</label>
-                                <input type="file" name="image" id="image" value="{{ $product->image }}" class="form-control-file mt-3">
+                                <input type="file" name="image" id="image" class="form-control-file mt-3">
                             </div>
                             <div class="mb-3">
                                 <label for="name" class="form-label">Description</label>
@@ -89,7 +89,7 @@
                 </form>
                 
             </div>
-            <div class="col-md-6">
+            <div class="d-none">
                 @include('productprice.index', [
                     'product_id'=>$product->id,
                     'product_stock'=>$product->stock,

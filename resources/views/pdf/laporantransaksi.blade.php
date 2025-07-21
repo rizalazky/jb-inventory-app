@@ -11,6 +11,10 @@
       color: #333;
     }
 
+    .text-left{
+      text-align : left;
+    }
+
     h2 {
       text-align: center;
     }
@@ -72,12 +76,14 @@
   <div class="info">
     <table>
       <tr>
-        <td><strong>Nama Toko:</strong></td>
-        <td>{{ $setting->name }}</td>
+        <td width='20%'><strong>Nama Toko</strong></td>
+        <td width='5px'>:</td>
+        <td class='text-left'>{{ $setting->name }}</td>
       </tr>
       <tr>
-        <td><strong>Alamat:</strong></td>
-        <td>{{ $setting->address }}</td>
+        <td><strong>Alamat</strong></td>
+        <td>:</td>
+        <td class='text-left'>{{ $setting->address }}</td>
       </tr>
     </table>
   </div>
@@ -88,7 +94,7 @@
         <th>No</th>
         <th>Tanggal</th>
         <th>No. Transaksi</th>
-        <th>Nama Pelanggan</th>
+        <th>{{ $type == 'out' ? 'Pelanggan' : 'Supplier' }}</th>
         <th>Total</th>
       </tr>
     </thead>
@@ -100,7 +106,7 @@
                 <td>{{ $i + 1 }}</td>
                 <td>{{ $t->date->format('d-m-Y') }}</td>
                 <td>{{ $t->transaction_number }}</td>
-                <td>{{ $type == 'out' ? $t->customer->name : $t->supplier->name }}</td>
+                <td>{{ $type == 'out' ? $t->customer->name ?? 'Umum' : $t->supplier->name ?? 'Umum' }}</td>
                 <td>Rp{{ number_format($t->total, 0, ',', '.') }}</td>
             </tr>
         @endforeach

@@ -105,6 +105,7 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'lihat akses']);
 
         $role = Role::create(['name' => 'Super-Admin']);
+        $role = Role::create(['name' => 'Kasir']);
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Super-Admin User',
