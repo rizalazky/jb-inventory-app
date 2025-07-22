@@ -14,7 +14,9 @@
                 <th>SELL PRICE</th>
                 <th>UNIT CONVERSION VALUE</th>
                 <th>STOK</th>
-                <th class="text-center">DEFAULT DISPLAY</th>
+
+                <th class="text-center">DEFAULT</th>
+
                 <th>ACTION</th>
             </thead>
             <tbody>
@@ -26,6 +28,7 @@
                         <td class="text-right">{{ number_format($price->sell_price) }}</td>
                         <td>{{ $price->unit_conversion_value ? $price->unit_conversion_value : 1 }} {{ $price->productunit->name }}</td>
                         <td>{{ $price->unit_conversion_value ? number_format($product_stock * $price->unit_conversion_value) : number_format($product_stock * 1) }} {{ $price->productunit->name }}</td>
+
                         <td class="d-flex justify-center">
                             <form action="/harga-produk/set-default-display" method="post">
                                 @csrf

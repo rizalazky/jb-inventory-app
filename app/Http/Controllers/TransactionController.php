@@ -79,6 +79,7 @@ class TransactionController extends Controller
                     'product_price_id' => $item['product_price_id'],
                     'price' => $item['price'],
                     'qty' => $item['qty'],
+                    'base_qty' =>$item['base_qty'],
                     'discount' => $item['discount'],
                 ]);
                 $transactionDetail->save();
