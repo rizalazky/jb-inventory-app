@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
  
 class StockDataTable extends DataTable
 {
@@ -19,15 +20,27 @@ class StockDataTable extends DataTable
             ->addColumn('action', 'stock.datatables.action')
             ->order(function ($query) {
                 if (request()->has('id')) {
-                    $query->orderBy('id', 'asc');
                 }
+                $query->orderBy('id', 'desc');
             })
             ->setRowId('id');
     }
  
     public function query(Stock $model): QueryBuilder
     {
-        return $model->with('product','productprice.productunit','user')->newQuery();
+        $can_read_stock_in = Auth::user()->can('stock-menu stock-in read');
+        $can_read_stock_out = Auth::user()->can('stock-menu stock-out read');
+        $query = $model->with('product','productprice.productunit','user')->newQuery();
+
+        if ($can_read_stock_in && !$can_read_stock_out) {
+            // Hanya bisa lihat transaksi masuk
+            $query->where('type', 'in');
+        }
+        if (!$can_read_stock_in && $can_read_stock_out) {
+            // Hanya bisa lihat transaksi keluar
+            $query->where('type', 'out');
+        }
+        return $query;
     }
  
     public function html(): HtmlBuilder

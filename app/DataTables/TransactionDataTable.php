@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
  
 class TransactionDataTable extends DataTable
 {
@@ -18,16 +19,28 @@ class TransactionDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', 'transaction.datatables.action')
             ->order(function ($query) {
-                if (request()->has('id')) {
-                    $query->orderBy('id', 'desc');
-                }
+                // if (request()->has('id')) {
+                // }
+                $query->orderBy('id', 'desc');
             })
             ->setRowId('id');
     }
  
     public function query(Transaction $model): QueryBuilder
     {
-        return $model->with('user','customer','supplier')->newQuery();
+        $can_read_transaction_in = Auth::user()->can('transaction-menu transaction-in read');
+        $can_read_transaction_out = Auth::user()->can('transaction-menu transaction-out read');
+        $query = $model->with('user','customer','supplier')->newQuery();
+
+        if ($can_read_transaction_in && !$can_read_transaction_out) {
+            // Hanya bisa lihat transaksi masuk
+            $query->where('type', 'in');
+        }
+        if (!$can_read_transaction_in && $can_read_transaction_out) {
+            // Hanya bisa lihat transaksi keluar
+            $query->where('type', 'out');
+        }    
+        return $query;
     }
  
     public function html(): HtmlBuilder
@@ -53,7 +66,7 @@ class TransactionDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            // Column::make('id'),
             Column::computed('date'),
             Column::computed('transaction_number'),
             Column::computed('customer')

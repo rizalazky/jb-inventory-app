@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('price');
+        Schema::table('product_prices', function (Blueprint $table) {
+            //
+            $table->boolean('is_default_display')->default(false);
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
-        Schema::table('products', function (Blueprint $table) {
-            $table->double('price');
+        Schema::table('product_prices', function (Blueprint $table) {
+            //
+            $table->dropColumn('is_default_display');
         });
     }
 };

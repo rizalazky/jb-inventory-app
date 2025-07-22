@@ -83,7 +83,9 @@
                         let productprices = data.productprices;
                         let optionsHTML = `<option>Select Unit</option>`;
                         productprices?.map(price=>{
-                            let option = `<option value='${price.id}' data-ucv='${price.unit_conversion_value || 1}'>${price.productunit.name} ${price.is_default ? '- DEFAULT' : ''}</option>`
+
+                            let option = `<option value='${price.id}' data-ucv='${price.unit_conversion_value || 1}'>${price.productunit.name}</option>`
+
                             optionsHTML = optionsHTML + option;
                         })
                         $('#product_price_id').html(optionsHTML)

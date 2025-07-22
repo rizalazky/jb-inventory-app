@@ -16,7 +16,8 @@ class ProductPrice extends Model
         'buy_price',
         'sell_price',
         'unit_conversion_value',
-        'is_default'
+        'is_default', // base unit price
+        'is_default_display', // for display purposes
     ];
 
     public function unitconversions_from():HasMany

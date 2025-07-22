@@ -11,6 +11,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
 
 class ProductUnitDataTable extends DataTable
 {
@@ -24,9 +25,9 @@ class ProductUnitDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', 'productunit.datatables.action')
             ->order(function ($query) {
-                if (request()->has('id')) {
-                    $query->orderBy('id', 'asc');
-                }
+                $query->orderBy('id', 'desc');
+                // if (request()->has('id')) {
+                // }
             })
             ->setRowId('id');
     }
@@ -52,7 +53,7 @@ class ProductUnitDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('add'),
+                        ...(Auth::user()->can('master-menu product-unit create') ? [Button::make('add')] : []),
                         Button::make('excel'),
                         Button::make('csv'),
                         Button::make('pdf'),
@@ -68,7 +69,7 @@ class ProductUnitDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            // Column::make('id'),
             Column::make('name'),
             Column::computed('action')
                   ->exportable(false)

@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
         $term = $request->input('term');
 
-        $results = Product::with('productprices.productunit')
+        $results = Product::with(['productprices.productunit','defaultProductPrice.productunit'])
                     ->where('name', 'LIKE', '%' . $term . '%')
                     ->orWhere('code','LIKE','%'.$term.'%')
                     ->get();
@@ -69,10 +69,9 @@ class ProductController extends Controller
                 }
     
                 // Update the logo field with the new filename
-            
+                $product->image = $filename;
+                $product->save();
             }
-            $product->image = $filename;
-            $product->save();
         } catch (\Throwable $th) {
             return null;
         }
@@ -110,7 +109,8 @@ class ProductController extends Controller
             'unit_conversion_value' =>1,
             'buy_price' =>$request->buy_price,
             'sell_price' =>$request->sell_price,
-            'is_default'=>true
+            'is_default'=>true,
+            'is_default_display' => true,
         ]);
 
         // add initial stock
@@ -119,6 +119,7 @@ class ProductController extends Controller
             'product_id' => $product->id,
             'product_price_id' => $productPrice->id,
             'quantity' => $request->stock,
+            'base_quantity' => $request->stock,
             'notes' => "Initial Stock",
             'user_by' => Auth::id(),
         ]);
@@ -162,6 +163,19 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->save();
 
+        $productPrice = ProductPrice::where('product_id', $product->id)->first();
+
+        if (!$productPrice) {
+            // Jika belum ada, buat baru
+            $productPrice = new ProductPrice();
+            $productPrice->product_id = $product->id;
+        }
+
+        $productPrice->buy_price = str_replace(',', '', $request->buy_price);;
+        $productPrice->sell_price = str_replace(',', '', $request->sell_price);;
+        $productPrice->save();
+
+        // dd($request->all());
         $this->handle_upload($request,$product);
 
         Alert::success('Well done!', 'Product  Updated!');

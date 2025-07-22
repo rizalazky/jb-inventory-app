@@ -29,24 +29,39 @@
         <p class='text-center'>Access Granted for Super Admin</p>
     @else
         <div class="container-fluid d-flex flex-wrap gap-2 overflow-auto">
-            @foreach($permissions as $permission)
-                <div class="card" style="min-width:250px;">
+            @foreach($permissions as $menu => $sub_menus)
+                <div class="card w-100">
                     <div class="card-header">
-                    {{ explode(' ', $permission[0]->name, 2)[1] ?? $permission[0]->name }}
-                    </div>
-                    <div class="card-body">
-                        
-                        @foreach($permission as $per)
                         <form method="POST" action="/role/permission">
                             @method('PUT')
                             @csrf
-                            <div class="custom-control custom-switch">
-                                <input type="hidden" name="permission_name" value="{{ $per->name }}">
+                            <div class="custom-control custom-switch mb-0">
+                                <input type="hidden" name="permission_name" value="{{ $menu }}">
                                 <input type="hidden" name="role_id" value="{{ $role->id }}">
-                                <input type="checkbox" class="custom-control-input" name="action" id="customSwitch1-{{ $per->id }}" onchange="this.form.submit()" @checked($role->hasPermissionTo($per->name))>
-                                <label class="custom-control-label" for="customSwitch1-{{ $per->id }}">{{ $per->name }}</label>
+                                <input type="checkbox" class="custom-control-input" name="action" id="customSwitch1-{{ $menu }}" onchange="this.form.submit()" @checked($role->hasPermissionTo($menu))>
+                                <label class="custom-control-label" for="customSwitch1-{{ $menu }}">{{ $menu }}</label>
                             </div>
                         </form>
+                    </div>
+                    <div class="card-body row">
+                        @foreach($sub_menus as $sub_menu => $actions)
+                            <div class="mb-3 col">
+                                <label class="form-label">{{ $sub_menu }}</label>
+                                <div class="form-check">
+                                    @foreach($actions as $key => $action)
+                                        <form method="POST" action="/role/permission">
+                                            @method('PUT')
+                                            @csrf
+                                            <div class="custom-control custom-switch">
+                                                <input type="hidden" name="permission_name" value="{{ $action->name }}">
+                                                <input type="hidden" name="role_id" value="{{ $role->id }}">
+                                                <input type="checkbox" class="custom-control-input" name="action" id="customSwitch1-{{ $action->id }}" onchange="this.form.submit()" @checked($role->hasPermissionTo($action->name))>
+                                                <label class="custom-control-label" for="customSwitch1-{{ $action->id }}">{{ explode(' ',$action->name )[2] }}</label>
+                                            </div>
+                                        </form>
+                                    @endforeach
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>

@@ -57,7 +57,7 @@ class StockController extends Controller
     }
 
     public function edit($id){
-        $data = Stock::find($id);
+        $data = Stock::with('transaction')->find($id);
         return view('stock.edit',['data'=>$data]);
     }
 

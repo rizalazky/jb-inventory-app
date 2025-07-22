@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
  
 class CustomerDataTable extends DataTable
 {
@@ -18,9 +19,9 @@ class CustomerDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', 'customer.datatables.action')
             ->order(function ($query) {
-                if (request()->has('id')) {
-                    $query->orderBy('id', 'asc');
-                }
+                // if (request()->has('id')) {
+                // }
+                $query->orderBy('id', 'desc');
             })
             ->setRowId('id');
     }
@@ -39,7 +40,7 @@ class CustomerDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('add'),
+                        ...(Auth::user()->can('customer-menu customer create') ? [Button::make('add')] : []),
                         Button::make('excel'),
                         Button::make('csv'),
                         Button::make('pdf'),
@@ -53,7 +54,7 @@ class CustomerDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            // Column::make('id'),
             Column::make('name'),
             Column::make('phone'),
             Column::make('address'),

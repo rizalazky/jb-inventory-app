@@ -55,11 +55,16 @@ class Product extends Model
             $product->code = self::generateProductCode();
         });
 
+
     }
 
     public function defaultProductPrice()
     {
         return $this->hasOne(ProductPrice::class)->where('is_default', true);
+    }
+    public function defaultDisplayProductPrice()
+    {
+        return $this->hasOne(ProductPrice::class)->where('is_default_display', true);
     }
 
     public function productprices():HasMany

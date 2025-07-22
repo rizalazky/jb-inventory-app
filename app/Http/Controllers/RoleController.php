@@ -40,11 +40,23 @@ class RoleController extends Controller
     {
         $role = Role::find($id);
         $permissions = Permission::all();
-        $groupedPermissions = $permissions->groupBy(function($permission) {
-            // Split the permission name into action and entity
-            list($action, $entity) = explode(' ', $permission->name, 2);
-            return $entity;
-        });
+        // dd($permissions);
+        $groupedPermissions = $permissions->reduce(function ($carry, $permission) {
+            $parts = explode(' ', $permission->name);
+
+            if (count($parts) < 3) {
+                return $carry;
+            }
+
+            [$menu, $subMenu] = $parts; // Extract the first two parts as menu and sub-menu
+            
+            $carry[$menu][$subMenu][] = $permission;
+
+            return $carry;
+        }, []);
+
+
+        
 
 
         // dd($groupedPermissions);

@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
  
 class SupplierDataTable extends DataTable
 {
@@ -18,9 +19,9 @@ class SupplierDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', 'supplier.datatables.action')
             ->order(function ($query) {
-                if (request()->has('id')) {
-                    $query->orderBy('id', 'asc');
-                }
+                // if (request()->has('id')) {
+                // }
+                $query->orderBy('id', 'asc');
             })
             ->setRowId('id');
     }
@@ -39,7 +40,7 @@ class SupplierDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('add'),
+                        ...(Auth::user()->can('supplier-menu supplier create') ? [Button::make('add')] : []),
                         Button::make('excel'),
                         Button::make('csv'),
                         Button::make('pdf'),

@@ -7,6 +7,7 @@ use App\DataTables\TransactionDataTable;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -151,7 +152,7 @@ class TransactionController extends Controller
                 
                 $transactionDetail = new TransactionDetail([
                     'transaction_id' => $transaction->id,
-                    'product_id' => $item['product_id'],
+                    'product_id' => $item['id'],
                     'product_price_id' => $item['product_price_id'],
                     'price' => $item['price'],
                     'qty' => $item['qty'],
@@ -180,17 +181,43 @@ class TransactionController extends Controller
     }
 
 
+    // public function in(){
+    //     return view('transaction.createv2',['type'=>'in']);
+    // }
     public function in(){
-        return view('transaction.create',['type'=>'in']);
+        $products = Product::with(['defaultProductPrice','productprices.productunit'])->get();
+
+        
+        $productCategories = ProductCategory::all();
+        return view('transaction.createv2',['type'=>'in',
+            'products' => $products,
+            'product_categories' => $productCategories
+        ]);
     }
     
+    // public function out(){
+    //     return view('transaction.createv2',['type'=>'out']);
+    // }
     public function out(){
-        return view('transaction.create',['type'=>'out']);
+        $products = Product::with(['defaultProductPrice','productprices.productunit'])->get();
+
+        
+        $productCategories = ProductCategory::all();
+        return view('transaction.createv2',['type'=>'out',
+            'products' => $products,
+            'product_categories' => $productCategories
+        ]);
     }
 
     public function edit($id){
-        $data = Transaction::with(['transaction_details.product.productprices.productunit','supplier'])->find($id);
-        return view('transaction.edit',['data'=>$data]);
+        $data = Transaction::with(['transaction_details.product.productprices.productunit','transaction_details.productprice.productunit','supplier'])->find($id);
+        $products = Product::with(['defaultProductPrice','productprices.productunit'])->get();
+        $productCategories = ProductCategory::all();
+        return view('transaction.editv2',[
+            'data'=>$data,
+            'products' => $products,
+            'product_categories' => $productCategories
+        ]);
     }
 
     public function delete($id){

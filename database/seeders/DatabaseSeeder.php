@@ -24,87 +24,111 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
-
-        // Permission::create(['name' => 'manage kategori produk']);
-        Permission::create(['name' => 'lihat kategori produk']);
-        Permission::create(['name' => 'tambah kategori produk']);
-        Permission::create(['name' => 'update kategori produk']);
-        Permission::create(['name' => 'hapus kategori produk']);
-
-        // Permission::create(['name' => 'manage unit produk']);
-        Permission::create(['name' => 'lihat unit produk']);
-        Permission::create(['name' => 'hapus unit produk']);
-        Permission::create(['name' => 'update unit produk']);
-        Permission::create(['name' => 'tambah unit produk']);
-
-        // Permission::create(['name' => 'manage produk']);
-        Permission::create(['name' => 'lihat produk']);
-        Permission::create(['name' => 'hapus produk']);
-        Permission::create(['name' => 'update produk']);
-        Permission::create(['name' => 'tambah produk']);
-
-        // Permission::create(['name' => 'manage customer']);
-        Permission::create(['name' => 'lihat customer']);
-        Permission::create(['name' => 'hapus customer']);
-        Permission::create(['name' => 'update customer']);
-        Permission::create(['name' => 'tambah customer']);
+        // Menu sub-menu action
+        // [0] => menu
+        // [1] => sub-menu
+        // [2] => action
+        // notes : 
+        // 1. dipisahkan dengan koma 
+        // 2. apabila memiliki dua suku kata sambungkan dengan (-), contoh "master-menu kategori-produk lihat"
         
-        // Permission::create(['name' => 'manage supplier']);
-        Permission::create(['name' => 'lihat supplier']);
-        Permission::create(['name' => 'hapus supplier']);
-        Permission::create(['name' => 'update supplier']);
-        Permission::create(['name' => 'tambah supplier']);
+        // Dashboard Menu
+        Permission::create(['name' => 'dashboard-menu']);
 
-        // Permission::create(['name' => 'manage transaksi']);
+        // Master Menu
+        Permission::create(['name' => 'master-menu']);
+            // Product Category
+            Permission::create(['name' => 'master-menu product-category create']);
+            Permission::create(['name' => 'master-menu product-category read']);
+            Permission::create(['name' => 'master-menu product-category update']);
+            Permission::create(['name' => 'master-menu product-category delete']);
+            // Product Unit
+            Permission::create(['name' => 'master-menu product-unit create']);
+            Permission::create(['name' => 'master-menu product-unit read']);
+            Permission::create(['name' => 'master-menu product-unit update']);
+            Permission::create(['name' => 'master-menu product-unit delete']);
+            // Product
+            Permission::create(['name' => 'master-menu product create']);
+            Permission::create(['name' => 'master-menu product read']);
+            Permission::create(['name' => 'master-menu product update']);
+            Permission::create(['name' => 'master-menu product delete']);
 
-        // Permission::create(['name' => 'manage transaksi masuk']);
-        Permission::create(['name' => 'lihat transaksi masuk']);
-        Permission::create(['name' => 'hapus transaksi masuk']);
-        Permission::create(['name' => 'update transaksi masuk']);
-        Permission::create(['name' => 'tambah transaksi masuk']);
+        // Customer Menu
+        Permission::create(['name' => 'customer-menu']);
+            // Customer
+            Permission::create(['name' => 'customer-menu customer create']);
+            Permission::create(['name' => 'customer-menu customer read']);
+            Permission::create(['name' => 'customer-menu customer update']);
+            Permission::create(['name' => 'customer-menu customer delete']);
 
-        // Permission::create(['name' => 'manage transaksi keluar']);
-        Permission::create(['name' => 'lihat transaksi keluar']);
-        Permission::create(['name' => 'hapus transaksi keluar']);
-        Permission::create(['name' => 'update transaksi keluar']);
-        Permission::create(['name' => 'tambah transaksi keluar']);
+        // Supplier Menu
+        Permission::create(['name' => 'supplier-menu']);
+            // Supplier
+            Permission::create(['name' => 'supplier-menu supplier create']);
+            Permission::create(['name' => 'supplier-menu supplier read']);
+            Permission::create(['name' => 'supplier-menu supplier update']);
+            Permission::create(['name' => 'supplier-menu supplier delete']);
 
+        // Transaction Menu
+        Permission::create(['name' => 'transaction-menu']);
+            // Transaction In
+            Permission::create(['name' => 'transaction-menu transaction-in create']);
+            Permission::create(['name' => 'transaction-menu transaction-in read']);
+            Permission::create(['name' => 'transaction-menu transaction-in update']);
+            Permission::create(['name' => 'transaction-menu transaction-in delete']);
+            // Transaction Out
+            Permission::create(['name' => 'transaction-menu transaction-out create']);
+            Permission::create(['name' => 'transaction-menu transaction-out read']);
+            Permission::create(['name' => 'transaction-menu transaction-out update']);
+            Permission::create(['name' => 'transaction-menu transaction-out delete']);
 
-        // Permission::create(['name' => 'manage stok']);
+        // Stock Menu
+        Permission::create(['name' => 'stock-menu']);
+            // Stock In
+            Permission::create(['name' => 'stock-menu stock-in create']);
+            Permission::create(['name' => 'stock-menu stock-in read']);
+            Permission::create(['name' => 'stock-menu stock-in update']);
+            Permission::create(['name' => 'stock-menu stock-in delete']);
+            // Stock Out
+            Permission::create(['name' => 'stock-menu stock-out create']);
+            Permission::create(['name' => 'stock-menu stock-out read']);
+            Permission::create(['name' => 'stock-menu stock-out update']);
+            Permission::create(['name' => 'stock-menu stock-out delete']);
 
-        // Permission::create(['name' => 'manage stok masuk']);
-        Permission::create(['name' => 'lihat stok masuk']);
-        Permission::create(['name' => 'hapus stok masuk']);
-        Permission::create(['name' => 'update stok masuk']);
-        Permission::create(['name' => 'tambah stok masuk']);
-
-        // Permission::create(['name' => 'manage stok keluar']);
-        Permission::create(['name' => 'lihat stok keluar']);
-        Permission::create(['name' => 'hapus stok keluar']);
-        Permission::create(['name' => 'update stok keluar']);
-        Permission::create(['name' => 'tambah stok keluar']);
+        // Report Menu
+        Permission::create(['name' => 'report-menu']);
+            // Report
+            Permission::create(['name' => 'report-menu report create']);
+            Permission::create(['name' => 'report-menu report read']);
+            // Permission::create(['name' => 'report-menu report update']);
+            // Permission::create(['name' => 'report-menu report delete']);
+            
+        // Setting Menu
+        Permission::create(['name' => 'setting-menu']);
+            // User
+            Permission::create(['name' => 'setting-menu user create']);
+            Permission::create(['name' => 'setting-menu user read']);
+            Permission::create(['name' => 'setting-menu user update']);
+            Permission::create(['name' => 'setting-menu user delete']);
+            // Role
+            Permission::create(['name' => 'setting-menu role create']);
+            Permission::create(['name' => 'setting-menu role read']);
+            Permission::create(['name' => 'setting-menu role update']);
+            Permission::create(['name' => 'setting-menu role delete']);
+            // Access
+            // Permission::create(['name' => 'setting-menu access create']);
+            Permission::create(['name' => 'setting-menu access read']);
+            // Permission::create(['name' => 'setting-menu access update']);
+            // Permission::create(['name' => 'setting-menu access delete']);
+            // Configuration
+            Permission::create(['name' => 'setting-menu config create']);
+            Permission::create(['name' => 'setting-menu config read']);
+            Permission::create(['name' => 'setting-menu config update']);
+            Permission::create(['name' => 'setting-menu config delete']);
         
-        // Permission::create(['name' => 'manage laporan']);
-        Permission::create(['name' => 'lihat laporan']);
-        
-        // Permission::create(['name' => 'manage user']);
-        Permission::create(['name' => 'lihat user']);
-        Permission::create(['name' => 'hapus user']);
-        Permission::create(['name' => 'update user']);
-        Permission::create(['name' => 'tambah user']);
 
-        // Permission::create(['name' => 'manage role']);
-        Permission::create(['name' => 'lihat role']);
-        Permission::create(['name' => 'hapus role']);
-        Permission::create(['name' => 'update role']);
-        Permission::create(['name' => 'tambah role']);
-
-       
-
-        // Permission::create(['name' => 'manage akses']);
-        Permission::create(['name' => 'lihat akses']);
-
-        $role = Role::create(['name' => 'Super-Admin']);
+        $sa_role = Role::create(['name' => 'Super-Admin']);
+        $kasir_ole = Role::create(['name' => 'Kasir']);
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Super-Admin User',
@@ -112,6 +136,6 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('12345')
         ]);
 
-        $user->assignRole($role);
+        $user->assignRole($sa_role);
     }
 }
