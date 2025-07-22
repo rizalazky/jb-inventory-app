@@ -327,6 +327,7 @@ return [
             'text' => 'DASHBOARD',
             'url' => '/',
             'icon' => 'fas fa-fw fa-home',
+            'can' => 'dashboard-menu'
         ],
         // [
         //     'text' => 'change_password',
@@ -336,12 +337,12 @@ return [
         [
             'text' => 'MASTER PRODUK',
             'icon' => 'fas fa-fw fa-table',
-            'can' => 'lihat produk',
+            'can' => 'master-menu',
             'submenu' => [
                 [
                     'text' => 'KATEGORI PRODUK',
                     'url' => '/kategori-produk',
-                    'can' => 'lihat kategori produk',
+                    'can' => 'master-menu product-category read',
                 ],
                 // [
                 //     'text' => 'MERK BARANG',
@@ -371,12 +372,12 @@ return [
                 [
                     'text' => 'UNIT PRODUK',
                     'url' => '/unit-produk',
-                    'can' => 'lihat unit produk',
+                    'can' => 'master-menu product-unit read',
                 ],
                 [
                     'text' => 'PRODUK',
                     'url' => '/produk',
-                    'can' => 'lihat produk',
+                    'can' => 'master-menu product read',
                 ],
             ],
         ],
@@ -384,34 +385,37 @@ return [
             'text' => 'CUSTOMER',
             'icon' => 'fas fa-fw fa-table',
             'url' => '/customer',
-            'can' => 'lihat customer',
+            'can' => 'customer-menu',
         ],
         [
             'text' => 'SUPPLIER',
             'icon' => 'fas fa-fw fa-table',
             'url' => '/supplier',
-            'can' => 'lihat supplier',
+            'can' => 'supplier-menu',
         ],
         [
             'text' => 'TRANSAKSI',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
-            'can' => 'lihat transaksi masuk',
+            'can' => 'transaction-menu',
             'submenu' => [
                 [
                     'text' => 'PENJUALAN',
                     'url' => '/transaksi/penjualan',
-                    'can' => 'lihat transaksi keluar',
+                    'can' => 'transaction-menu transaction-out create',
                 ],
                 [
                     'text' => 'PEMBELIAN',
                     'url' => '/transaksi/pembelian',
-                    'can' => 'lihat transaksi masuk',
+                    'can' => 'transaction-menu transaction-in create',
                 ],
                 [
                     'text' => 'HISTORY',
                     'url' => '/transaksi/history',
-                    'can' => 'lihat history transaksi',
+                    'can' => [
+                        'transaction-menu transaction-in read',
+                        'transaction-menu transaction-out read',
+                    ],
                 ],
             ]
         ],
@@ -419,22 +423,25 @@ return [
             'text' => 'STOK',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
-            'can' => 'manage stok',
+            'can' => 'stock-menu',
             'submenu' => [
                 [
                     'text' => 'STOK  MASUK',
                     'url' => '/stok/in',
-                    'can' => 'lihat stok',
+                    'can' => 'stock-menu stock-in create',
                 ],
                 [
                     'text' => 'STOK KELUAR',
                     'url' => '/stok/out',
-                    'can' => 'lihat stok',
+                    'can' => 'stock-menu stock-out create',
                 ],
                 [
                     'text' => 'HISTORY STOK',
                     'url' => '/stok/history',
-                    'can' => 'lihat stok',
+                    'can' => [
+                        'stock-menu stock-in read',
+                        'stock-menu stock-out read',
+                    ],
                 ],
             ]
         ],
@@ -442,51 +449,60 @@ return [
             'text' => 'LAPORAN',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
-            'can' => 'lihat laporan',
+            'can' => 'report-menu',
             'submenu' => [
                 [
                     'text' => 'LAPORAN PENJUALAN',
                     'url' => '/laporan/penjualan',
-                    'can' => 'lihat laporan penjualan',
+                    'can' => [
+                        'report-menu report create',
+                        'report-menu report read',
+                    ],
                 ],
                 [
                     'text' => 'LAPORAN PEMBELIAN',
                     'url' => '/laporan/pembelian',
-                    'can' => 'lihat laporan pembelian',
+                    'can' => [
+                        'report-menu report create',
+                        'report-menu report read',
+                    ],
                 ],
                 [
                     'text' => 'LAPORAN STOK',
                     'url' => '/laporan/stok',
-                    'can' => 'lihat laporan stok',
+                    'can' => [
+                        'report-menu report create',
+                        'report-menu report read',
+                    ],
                 ],
             ]
         ],
-        ['header' => 'OTHER'],
+        ['header' => 'OTHER', 'can' => 'setting-menu'],
         [
             'text' => 'SETTING',
             'icon' => 'fas fa-fw fa-table',
             'url' => '#',
-            'can' => 'lihat user',
+            'can' => 'setting-menu',
             'submenu' => [
                 [
                     'text' => 'ROLE',
                     'url' => '/role',
-                    'can' => 'lihat role',
+                    'can' => 'setting-menu role read',
                 ],
                 [
                     'text' => 'USER',
                     'url' => '/user',
-                    'can' => 'lihat user',
+                    'can' => 'setting-menu user read',
                 ],
                 [
                     'text' => 'AKSES',
                     'url' => '/akses',
-                    'can' => 'lihat akses',
+                    'can' => 'setting-menu access read',
                 ],
                 [
                     'text' => 'CONFIG',
                     'url' => '/config',
-                    'can' => 'lihat akses',
+                    'can' => 'setting-menu config read',
                 ],
             ]
         ],

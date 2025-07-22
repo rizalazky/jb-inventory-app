@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
  
 class UsersDataTable extends DataTable
 {
@@ -43,7 +44,7 @@ class UsersDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('add'),
+                        ...(Auth::user()->can('setting-menu user create') ? [Button::make('add')] : []),
                         Button::make('excel'),
                         Button::make('csv'),
                         Button::make('pdf'),
@@ -57,7 +58,7 @@ class UsersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            // Column::make('id'),
             Column::make('name'),
             Column::make('email'),
             Column::make('role'),

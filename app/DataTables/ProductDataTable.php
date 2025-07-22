@@ -11,6 +11,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
 
 class ProductDataTable extends DataTable
 {
@@ -35,9 +36,9 @@ class ProductDataTable extends DataTable
             })
             ->addColumn('action', 'product.datatables.action')
             ->order(function ($query) {
-                if (request()->has('id')) {
-                    $query->orderBy('id', 'asc');
-                }
+                // if (request()->has('id')) {
+                // }
+                $query->orderBy('id', 'desc');
             })
             ->rawColumns(['image', 'action'])
             ->setRowId('id');
@@ -64,7 +65,7 @@ class ProductDataTable extends DataTable
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('add'),
+                        ...(Auth::user()->can('master-menu product create') ? [Button::make('add')] : []),
                         Button::make('excel'),
                         Button::make('csv'),
                         Button::make('pdf'),
@@ -106,6 +107,6 @@ class ProductDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'ProductUnit_' . date('YmdHis');
+        return 'Product_' . date('YmdHis');
     }
 }
