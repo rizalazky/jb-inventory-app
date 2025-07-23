@@ -1,126 +1,75 @@
 <x-app-layout>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <x-slot name="header">
-        @if($type == 'out')   
+        @if($data->type == 'out')   
             {{ __('TRANSAKSI PENJUALAN') }}
         @else
             {{ __('TRANSAKSI PEMBELIAN') }}
         @endif
     </x-slot>
 
-    <input type="hidden" name="type" id="type" value="{{ $type }}">
+    <input type="hidden" name="type" id="type" value="{{ $data->type }}">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12">
                 <div class="card">
+                    <div class="card-header flex justify-content-end">
+                        <button type="button" id="btn-new" class="btn btn-default mr-2">
+                            <a href="/transaksi/penjualan">Transaksi Baru</a>
+                        </button>
+                        @if(($data->type == 'in' && Auth::user()->can('transaction-menu transaction-in update')) || ($data->type == 'out' && Auth::user()->can('transaction-menu transaction-out update')) )
+                            <button type="button" id="btn-submit" class="btn btn-primary mr-2">
+                                <a href="/transaksi/edit/{{ $data->id }}" class='text-white'>Update</a>
+                            </button>
+                        @endif
+                        <button type="button" id="btn-print-receipt" class="btn btn-info">Cetak Struk</button>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-4">
                                 <label for="date">Tanggal</label>
-                                <input type="date" name="date" value="{{ date('Y-m-d')}}" id="date" class="form-control">
+                                <input type="date" name="date" disabled value="{{ \Carbon\Carbon::parse($data->date)->format('Y-m-d') }}" id="date" class="form-control">
                             </div>
                             <div class="col-4">
-                            @if($type == 'out')   
+                             @if($data->type == 'out')   
                                 <label for="date">Customer</label>
-                                <select name="" class="form-control" id="customer_id"></select> 
+                                <select name="" class="form-control" disabled id="customer_id">
+                                    @if($data->customer)
+                                        <option value="{{ $data->customer_id }}"  selected>{{ $data->customer->name }}</option>
+                                    @endif
+                                </select> 
                             @else
                                 <label for="date">Supplier</label>
-                                <select name="" class="form-control" id="supplier_id"></select> 
+                                <select name="" class="form-control" disabled id="supplier_id">
+                                    @if($data->supplier)
+                                        <option value="{{ $data->supplier_id }}"  selected>{{ $data->supplier->name }}</option>
+                                    @endif
+                                </select> 
                             @endif
                             </div>
                             <div class="col-4">
                                 <label for="date">NO TRANSAKSI</label>
-                                <input type="transaction_number" value="AUTO GENERATED" name="transaction_number" id="transaction_number" disabled class="form-control">
+                                <input type="transaction_number" value="{{ $data->transaction_number }}" disabled name="transaction_number" id="transaction_number" disabled class="form-control">
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                            <div class="col-6">
-                                <label for="barcode-input">SCAN BARCODE</label>
-                                <input type="text" name="barcode-input" placeholder="Scan Barcode" id="barcode-input" class="form-control">
-                            </div>
-                            
-                            <div class="col-6">
-                                <label for="product_id">CARI PRODUK</label>
-                                <select id="product_id" name="product_id" class="form-control">
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="d-flex p-2 overflow-x-auto mt-4">
-                            <button class='btn btn-outline-info btn-sm btn-category mr-2' data-id='all'>All</button>
-                            @foreach($product_categories as $category)
-                                <button class='btn btn-outline-info btn-sm btn-category mr-2 text-nowrap' data-id='{{ $category->id }}'>{{ $category->name }}</button>
-                            @endforeach
-                            
-                        </div>
-                        <div class="row mt-4">
-                            @foreach($products as $product)
-                                <div class="col-3 item-product" 
-                                    data-catid='{{ $product->category_id }}' 
-                                    data-id='{{ $product->id }}' 
-                                    data-name='{{ $product->name }}' 
-                                    data-code='{{ $product->code }}' 
-                                    data-stock='{{ $product->code }}' 
-                                    data-priceid = '{{ $product->defaultProductPrice->id ?? 0 }}'
-                                    data-price='{{ $type == "out" ? $product->defaultProductPrice->sell_price : $product->defaultProductPrice->buy_price }}'
-                                    data-unit ='{{ $product->defaultProductPrice->productunit->name }}'
-                                    data-productprices={{ json_encode($product->productprices) }}
-                                    >
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <img src="{{ $product->image ? asset('storage/uploads/products/images/'.$product->image) : asset('images/no-image.png') }}" class="img-fluid" alt="{{ $product->name }}">
-                                            <div class="text-left">
-                                                <strong>{{ $product->code }}</strong>
-                                                <br>
-                                                <span class="text-muted">{{ $product->name }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-            </div>
-            <div class="col-4 ">
-                <div class="card h-100">
-                    <div class="card-header flex justify-end">
-                        <button disabled id='reset-cart' class='btn btn-sm btn-danger'>Reset</button>
-                    </div>
-                    <div class="card-body h-100 overflow-y-auto" id='cart'>
-                        
-                    </div>
-                    <div class="card-footer">
-                        <button class='btn btn-primary w-full' id='btn-checkout' disabled data-bs-toggle="modal" data-bs-target="#exampleModal">Checkout : <span><strong id='subTotal'>0</strong></span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row">
+                        <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="sub_total" class="form-label">Sub Total</label>
-                                <input type="number" name="sub_total" id="sub_total" disabled class="form-control">
+                                <input type="text" name="sub_total" value="{{ number_format($data->sub_total) }}" id="sub_total" disabled class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="discount" class="form-label">Diskon</label>
-                                <input type="number" name="discount" value="0" id="discount" class="form-control">
+                                <input type="text" name="discount" disabled value="{{ number_format($data->discount) }}" id="discount" class="form-control">
                             </div>
                             
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="total" class="form-label">TOTAL</label>
-                                <input type="number" name="total" id="total" disabled class="form-control">
+                                <input type="text" name="total" disabled id="total" value="{{ number_format($data->total) }}" disabled class="form-control">
                             </div>
 
                         </div>
@@ -129,28 +78,62 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="cash_paid" class="form-label">CASH</label>
-                                <input type="number" name="cash_paid" id="cash_paid" class="form-control">
+                                <input type="text" name="cash_paid" disabled id="cash_paid" value="{{ number_format($data->cash_paid) }}" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="change" class="form-label">Kembali</label>
-                                <input type="number" name="change" id="change" disabled class="form-control">
+                                <input type="text" name="change" id="change" disabled value="{{ number_format($data->change) }}" class="form-control">
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Catatan</label>
-                               <textarea name="notes" id="notes" class="form-control" rows="4"></textarea>
+                               <textarea name="notes" id="notes" disabled class="form-control" rows="4">{{ $data->notes }}</textarea>
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btn-submit" class="btn btn-primary">Submit</button>
+                
+                
+                
+            </div>
+            <div class="col-12 ">
+                <div class="card h-100">
+                    <div class="card-header flex">
+                        <div class="card-title">Items</div>
+                    </div>
+                    <div class="card-body h-100 overflow-y-auto" id='cart'>
+                        <table class='table table-bordered'>
+                            <thead>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                            </thead>
+                            <tbody>
+                                @foreach($data->transaction_details as $detail)
+                                    <tr>
+                                        <td>{{ $detail->product->name }}</td>
+                                        <td>{{ $detail->qty }}</td>
+                                        <td>{{ $detail->productprice->productunit->name }}</td>
+                                        <td>{{ number_format($detail->price) }}</td>
+                                        <td>{{ number_format($detail->qty * $detail->price ) }}</td>
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    
 
     @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
@@ -172,36 +155,31 @@
                     const btnResetCart = document.getElementById('reset-cart');
                     const btnCategories = document.getElementsByClassName('btn-category');
                     const btnCheckout = document.querySelector('#btn-checkout');
+                    let productList = []
 
-                    console.log('btnCategories', btnCategories)
 
-                    for (let i = 0; i < btnCategories.length; i++) {
-                        const btn = btnCategories[i];
-                        btn.addEventListener('click',function(){
-                            let id = this.dataset.id;
-                            console.log('id', id)
-                            for (let i = 0; i < items.length; i++) {
-                                items[i].classList.remove('d-none');
-                                if(id != 'all'){
-                                    if(items[i].dataset.catid != id){
-                                        items[i].classList.add('d-none');
-                                    }
-                                }
-                            }
-                        })
+                    
+
+
+                    
+
+                    
+
+                    const setTransactionTotal = ()=>{
+                        totalEl.value = (Number(subTotalModalEl.value) || 0) - (Number(discountEl.value) || 0);
+                        // trigger total change event
+                        $('#total').trigger('change');
                     }
 
+                    const setTransactionSubTotal = ()=>{
+                        let subTotal = productList.reduce((accumulator,currentValue) => Number(accumulator) + Number(currentValue.total), 0);
 
-                    let productList = [];
+                        console.log(subTotal)
+                        subTotalEl.innerText = subTotal;
+                        subTotalModalEl.value = subTotal;
 
-                    btnResetCart.addEventListener('click',function(){
-                        let confirm = window.confirm('Are you sure want to delete the cart items');
-                        if(!confirm){
-                            return false;
-                        }
-                        productList = [];
-                        generateCart();
-                    });
+                        setTransactionTotal();
+                    }
 
 
                     function generateCart(){
@@ -271,6 +249,33 @@
                         cart.innerHTML =  html;
                         setTransactionSubTotal();
                     }
+
+                    function initPage(){
+                        const transactionDetails = @json($data->transaction_details);
+                        for (let i = 0; i < transactionDetails.length; i++) {
+                            const data = transactionDetails[i];
+                            console.log('data', data);
+                            const product = {
+                                id : data.product.id,
+                                code: data.product.code,
+                                name: data.product.name,
+                                price: data.price,
+                                qty: data.qty,
+                                total : Number(data.price) * Number(data.qty),
+                                stock : data.product.stock,
+                                unit : data.productprice.productunit.name,
+                                productPrices : data.product.productprices,
+                                product_price_id : data.product_price_id,
+                                discount : data.discount
+                            };
+                            console.log('Product clicked:', product);
+                            pushProductList(product);
+                        }
+                        generateCart();
+                    }
+
+                    // initPage();
+
 
                     cart.addEventListener('click',(e)=>{
                         const target = e.target;
@@ -375,19 +380,7 @@
                     
                     
 
-                    const setTransactionTotal = ()=>{
-                        totalEl.value = (Number(subTotalModalEl.value) || 0) - (Number(discountEl.value) || 0);
-                    }
-
-                    const setTransactionSubTotal = ()=>{
-                        let subTotal = productList.reduce((accumulator,currentValue) => Number(accumulator) + Number(currentValue.total), 0);
-
-                        console.log(subTotal)
-                        subTotalEl.innerText = subTotal;
-                        subTotalModalEl.value = subTotal;
-
-                        setTransactionTotal();
-                    }
+                    
 
                     discountEl.addEventListener('input',()=>{
                         setTransactionSubTotal();
@@ -395,6 +388,14 @@
 
 
                     $('#cash_paid, #total').on('input',function(){
+                        let total = $('#total').val();
+                        let cash_paid = $('#cash_paid').val();
+
+                        $('#change').val(cash_paid - total);
+                    });
+
+                    $('#total').change(function(){
+                        console.log('TOTAL CHANGE');
                         let total = $('#total').val();
                         let cash_paid = $('#cash_paid').val();
 
@@ -564,16 +565,17 @@
 
                     
 
+
                     
 
                     async function saveTransaction(data){
                         // let url = 'http://localhost:8000/transaksi/save';
                         let crsfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                        let url = '/transaksi/save';
+                        let url = '/transaksi/edit/{{ $data->id }}';
 
                         $.ajax({
                             url: url,
-                            method: 'POST',
+                            method: 'PUT',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
@@ -581,12 +583,13 @@
                             data: JSON.stringify(data),
                             success: function(response) {
                                 console.log('result', response);
-                                window.location.href = `/transaksi/detail/${response.transaction.id}`;
                                 // if(!response.status){
                                 //     alert(resp)
                                 // }
-                                // alert('Transaction saved successfully!');
-                                // printReceipt(response.transaction.id);
+                                alert('Transaction saved successfully!');
+                                // reload the page
+                                // window.location.reload()
+                                location.reload();
                             },
                             error: function(xhr, status, error) {
                                 if (xhr.status === 302) {
@@ -602,7 +605,7 @@
 
                     const printReceipt = (transactionId) => {
                         
-                        fetch(`/transaksi/pdf/preview/${transactionId}`)
+                        fetch(`/transaksi/pdf/preview/{{ $data->id }}`)
                             .then(res => res.blob())
                             .then(blob => {
                                 // Create a URL for the PDF blob
@@ -630,6 +633,11 @@
                             .catch(error => console.error('Error fetching PDF:', error));
                     }
 
+                    $('#btn-print-receipt').click(function(){
+                        printReceipt();
+
+                    })
+
                     $('#btn-submit').on('click',function(e){
                         e.preventDefault();
                         let data = {
@@ -646,12 +654,14 @@
                             notes : $('#notes').val(),
                         }
 
-                        // console.log('DATA', data);
+                        // console.log(data);
                         // return false;
 
 
                         saveTransaction(data)
-                    })
+                    });
+
+                    
                 });
 
 
