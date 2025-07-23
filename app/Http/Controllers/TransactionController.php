@@ -208,6 +208,17 @@ class TransactionController extends Controller
         ]);
     }
 
+    public function detail($id){
+        $data = Transaction::with(['transaction_details.product.productprices.productunit','transaction_details.productprice.productunit','supplier'])->find($id);
+        $products = Product::with(['defaultProductPrice','productprices.productunit'])->get();
+        $productCategories = ProductCategory::all();
+        return view('transaction.detail',[
+            'data'=>$data,
+            'products' => $products,
+            'product_categories' => $productCategories
+        ]);
+    }
+
     public function edit($id){
         $data = Transaction::with(['transaction_details.product.productprices.productunit','transaction_details.productprice.productunit','supplier'])->find($id);
         $products = Product::with(['defaultProductPrice','productprices.productunit'])->get();

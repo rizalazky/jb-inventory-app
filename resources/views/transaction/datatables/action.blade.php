@@ -1,4 +1,10 @@
-<div class="row"> 
+<div class="row flex flex-nowrap"> 
+    @if($type == 'in' && Auth::user()->can('transaction-menu transaction-in read'))
+        <a href="/transaksi/detail/{{ $id }}"  class="btn btn-info btn-sm mr-1"><i class="fas fa-fw fa-eye"></i></a>
+    @endif
+    @if($type == 'out' && Auth::user()->can('transaction-menu transaction-out read'))
+        <a href="/transaksi/detail/{{ $id }}"  class="btn btn-info btn-sm mr-1"><i class="fas fa-fw fa-eye"></i></a>
+    @endif
     @if($type == 'in' && Auth::user()->can('transaction-menu transaction-in update') )
         <a href="/transaksi/edit/{{ $id }}"  class="btn btn-info btn-sm mr-1"><i class="fas fa-fw fa-pen"></i></a>
     @endif
