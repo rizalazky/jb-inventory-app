@@ -10,6 +10,8 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
  
 class TransactionDataTable extends DataTable
 {
@@ -17,12 +19,24 @@ class TransactionDataTable extends DataTable
 
     {
         return (new EloquentDataTable($query))
+            ->editColumn('date', function ($row) {
+                return Carbon::parse($row->date)->format('d/m/Y');
+            })
+            ->addColumn('relasi', function ($row) {
+                if ($row->type === 'in') {
+                    return '<span class="badge bg-success">'.optional($row->supplier)->name.'</span> ';
+                } elseif ($row->type === 'out') {
+                    return '<span class="badge bg-info">'.optional($row->customer)->name.'</span> ';
+                }
+                return '-';
+            })
             ->addColumn('action', 'transaction.datatables.action')
             ->order(function ($query) {
                 // if (request()->has('id')) {
                 // }
                 $query->orderBy('id', 'desc');
             })
+            ->rawColumns(['relasi','action']) // <- Jangan lupa jika pakai HTML!
             ->setRowId('id');
     }
  
@@ -68,15 +82,13 @@ class TransactionDataTable extends DataTable
         return [
             // Column::make('id'),
             Column::computed('date'),
-            Column::computed('transaction_number'),
-            Column::computed('customer')
-                        ->title('Customer')
-                        ->data('customer.name') // Assuming 'name' is the field you want to display from the Product model
-                        ->name('customer.name'),
-            Column::computed('supplier')
-                        ->title('Supplier')
-                        ->data('supplier.name') // Assuming 'name' is the field you want to display from the Product model
-                        ->name('supplier.name'),
+            Column::computed('transaction_number')
+                    ->title('Trx Number'),
+            Column::computed('relasi')
+                ->title('Supp / Cust') // atau bisa "Supplier / Customer"
+                ->exportable(true)
+                ->printable(true)
+                ->addClass('text-start'),
             Column::computed('type'),
             // Column::make('notes'),
             Column::computed('users')

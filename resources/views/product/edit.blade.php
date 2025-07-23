@@ -47,9 +47,7 @@
                                     <label for="name" class="form-label">Satuan</label>
                                     <select name="" id="unit-default" class="form-control" disabled>
                                         @foreach ($product->productprices as $dt)
-
-                                            @if($dt->is_default)
-
+                                            @if($dt->is_default_display)
                                                 <option class="option-unit" data-stock="{{ $product->stock }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}" selected>{{ $dt->productunit->name }}</option>
                                             @else
                                                 <option class="option-unit" data-stock="{{ number_format($dt->unit_conversion_value * $product->stock) }}" data-buyprice="{{ number_format($dt->buy_price) }}" data-sellprice="{{ number_format($dt->sell_price) }}" value="{{ $dt->id }}">{{ $dt->productunit->name }}</option>
@@ -59,13 +57,11 @@
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Harga Beli</label>
-
                                     <input type="text" class="form-control" name="buy_price" id="buy-price-default" value="{{ number_format($product->defaultProductPrice->buy_price) }}">
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Harga Jual</label>
                                     <input type="text" class="form-control" name="sell_price" id="sell-price-default" value="{{ number_format($product->defaultProductPrice->sell_price) }}">
-
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="name" class="form-label">Stok</label>

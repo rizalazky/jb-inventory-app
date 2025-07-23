@@ -48,14 +48,6 @@
                         <input type="number" name="base_quantity" id="base_quantity" value="{{ $data->base_quantity }}" class="form-control" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="quantity" class="form-label">Unit Conversion Number</label>
-                        <input type="number" name="unit_conversion_value" id="unit_conversion_value" value="{{ $data->quantity / $data->base_quantity }}" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="quantity" class="form-label">Base Quantity</label>
-                        <input type="number" name="base_quantity" id="base_quantity" value="{{ $data->base_quantity }}" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Catatan</label>
                        <textarea name="notes" id="notes" class="form-control" @disabled($data->transaction_id !== null)>{{ $data->notes }}</textarea>
                     </div>

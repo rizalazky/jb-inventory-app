@@ -79,7 +79,6 @@ class TransactionController extends Controller
                     'product_price_id' => $item['product_price_id'],
                     'price' => $item['price'],
                     'qty' => $item['qty'],
-                    'base_qty' =>$item['base_qty'],
                     'discount' => $item['discount'],
                 ]);
                 $transactionDetail->save();
@@ -204,6 +203,17 @@ class TransactionController extends Controller
         
         $productCategories = ProductCategory::all();
         return view('transaction.createv2',['type'=>'out',
+            'products' => $products,
+            'product_categories' => $productCategories
+        ]);
+    }
+
+    public function detail($id){
+        $data = Transaction::with(['transaction_details.product.productprices.productunit','transaction_details.productprice.productunit','supplier'])->find($id);
+        $products = Product::with(['defaultProductPrice','productprices.productunit'])->get();
+        $productCategories = ProductCategory::all();
+        return view('transaction.detail',[
+            'data'=>$data,
             'products' => $products,
             'product_categories' => $productCategories
         ]);

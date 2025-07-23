@@ -202,6 +202,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role_or_permission:transaction-menu')->prefix('transaksi')->group(function () {
+        Route::middleware('role_or_permission:transaction-menu transaction-in read|transaction-menu transaction-out read')
+                ->get('/detail/{id}', [TransactionController::class, 'detail'])->name('transaction.detail');
         Route::middleware('role_or_permission:transaction-menu transaction-in create')
                 ->get('/pembelian', [TransactionController::class, 'in'])->name('transaction.in');
         Route::post('/save', [TransactionController::class, 'store'])->name('transaction.store');

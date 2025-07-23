@@ -209,9 +209,7 @@
                                         productPriceDefault = price.id;
                                         unitConversionValue = price.unit_conversion_value;
                                     }
-
                                     let option = `<option data-price="${price.sell_price}" data-ucv="${price.unit_conversion_value}" value='${price.id}' ${price.id == product.product_price_id  && 'selected'}>${price.productunit.name}</option>`
-
                                     optionsHTML = optionsHTML + option;
 
                                 
